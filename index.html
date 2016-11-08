@@ -1,54 +1,612 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Saga2016 | Trackbox Map</title>
-	<meta charset="utf-8" />
+	<meta charset=utf-8 />
+	<title>TrackBox</title>
 	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-	<meta name="format-detection" content="telephone=no">
-	<link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css"  media="screen,projection"/>
-	<style>
-		body { margin:0; padding:0; }
-		#map { position:absolute; top:0; bottom:0; width:100%;  }
-	</style>
+	<link rel="stylesheet" href="http://track-box.github.io/trackbox/public/uikit-2.8.0/uikit.almost-flat.min.css" />
+	<link rel="stylesheet" href="app.css" />
 </head>
+
 <body>
-	<div id="map"></div>
+	<div id="container">
+		<div class="uk-button-dropdown" data-uk-dropdown>
+			<button id="plane" class="uk-icon-button uk-icon-paper-plane-o"></button>
+		</div>
 
-	<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+		<div id="file-name"></div>
+
+		<div id="map"></div>
+
+		<button id="graph-button" class="uk-icon-button uk-icon-bar-chart-o" data-uk-modal="{target:'#info-modal'}"></button>
+
+		<div id="bottom"></div>
+	</div>
+
+	<div id="info-modal" class="uk-modal">
+		<div class="uk-modal-dialog" id="info-modal-dialog">
+			<a class="uk-modal-close uk-close"></a>
+			<h3></h3>
+
+			<div id="info">
+				<div id="chart-container">
+					<div id="chart"></div>
+				</div>
+
+				<div id="summary">
+					<table class="uk-table uk-table-hover">
+						<tr>
+							<th>Time</th>
+							<td id="time"></td>
+						</tr>
+						<tr>
+							<th>Track</th>
+							<td id="track"></td>
+						</tr>
+						<tr>
+							<th>Distance</th>
+							<td id="distance"></td>
+						</tr>
+						<tr>
+							<th>Avg Speed</th>
+							<td id="avg-speed"></td>
+						</tr>
+						<tr>
+							<th>Max Speed</th>
+							<td id="max-speed"></td>
+						</tr>
+						<tr>
+							<th>Min Altitude</th>
+							<td id="min-alt"></td>
+						</tr>
+						<tr>
+							<th>Max Altitude</th>
+							<td id="max-alt"></td>
+						</tr>
+					</table>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+	<div id="overlay"></div>
+	<div id="loading"></div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script src="http://track-box.github.io/trackbox/public/uikit-2.8.0/uikit.min.js"></script>
+	<script src="http://track-box.github.io/trackbox/public/sonic.js"></script>
 	<script src="//maps.google.com/maps/api/js?v=3&key=AIzaSyChuaneGgTfTzlwUdqAGw7ns6cJTIQEbGg&libraries=geometry"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"></script>
-	<script src="//track-box.github.io/trackbox-map/lib/markerclusterer.js"></script>
-	<script src="//track-box.github.io/trackbox-map/saga2016/trackbox-map.js"></script>
+	<script src="trackbox-map.js"></script>
+
 	<script>
-	$(function(){
-		var map = new google.maps.Map(document.getElementById('map'), {
-			mapTypeId: google.maps.MapTypeId.HYBRID,
-			center: new google.maps.LatLng(33.252814, 130.245334),
-			zoom: 12,
-			mapTypeControl: false,
-			zoomControl: false,
-			streetViewControl: false
+		$(function(){
+			var track;
+			var isMobile;
+			var shared = false;
+			var track_id = "";
+			var host = "http://trackbox.herokuapp.com";
+
+			// onload ----------------------------------------------------------
+			var googleHybrid = L.tileLayer(
+				"http://mt{s}.google.com/vt/lyrs=y&hl=ja&x={x}&y={y}&z={z}",
+				{	
+					subdomains: [0,1,2,3],
+					detectRetina: true
+				}
+			);
+
+			var map = L.map('map', {
+				center: [36.204824, 138.252924],
+				zoom: 5,
+				layers: [ googleHybrid ],
+			});
+
+
+			if ( L.Browser.mobile || $(document).width() < 640 ){
+				isMobile = true;
+				map.zoomControl.removeFrom(map);
+				map.attributionControl.removeFrom(map);
+				$("#dropdown").remove();
+
+			}else{
+				isMobile = false;
+				map.zoomControl.setPosition("bottomleft");
+				map.attributionControl.setPrefix(false);
+				$("#graph-button").hide();
+
+			}
+
+			
+			var file_modal = $.UIkit.modal("#file-modal");
+			if ( shared ){
+				$("#overlay").show();
+				loading();
+			
+				$.ajax({
+					type: "GET",
+					url: "/get",
+					data: { id: track_id },
+					dataType: "json"
+				}).done(parseJSON);
+
+			}else{
+				if ( isMobile ){
+					$("#file-modal-dialog").html("モバイルブラウザには対応していませんm(__)m")
+						.css({ left: "10px", width: "100%" });
+				}
+				file_modal.show();
+			}
+
+			// events ----------------------------------------------------------
+			$("#file").change(function(e){
+				var file = e.target.files[0];
+				var reader = new FileReader;
+				$("#file-button").text("読み込み中.....");
+
+				reader.onload = function(e) {
+					var result = e.target.result;
+					file_modal.hide();
+					$("#file-name").text(file.name);
+					parseGPX(result);
+				};
+
+				reader.readAsText(file);
+			});
+
+			$("#file-button").on("click", function(){
+				$("#file").click();
+			});
+
+			$("#new").click(function(){
+				if ( shared ){
+					location.href = "/";
+				}else{
+					$("#file-button").text("ファイルを選択");
+					file_modal.show();
+				}
+			});
+
+
+			$("#share").click(function(){
+				if ( shared ){
+					$("#link-modal input").val(host + "/track/" + track_id);
+					$.UIkit.modal("#link-modal").show();
+				}else{
+					$("#share-button").text("共有する");
+					$.UIkit.modal("#share-modal").show();
+				}
+			});
+
+			$("#share-button").click(function(){
+				$("#share-button").text("送信中....");
+
+				$.ajax({
+					type: "POST",
+					url: "/post",
+					dataType: "json",
+					data: { data: track2json() },
+					success: function(data) {
+						console.log(data);
+						shared = true;
+						track_id = data.id;
+						$("#link-modal input").val(host + "/track/" + track_id);
+						$.UIkit.modal("#link-modal").show();
+					},
+					error: function() {
+						alert("error!");
+					}
+				});
+			});
+
+
+			function toggleInfo() {
+				if ( !isMobile ){
+					$("#bottom").append($("#info"));
+					$("#map").css({ bottom: "200px" });
+					$("#bottom").css({ height: "200px" });
+				}
+			}
+
+
+
+
+
+			//-----------------------------------------------------------------
+			function parseGPX(gpx){
+				track = [];
+				var min_alt, max_alt;
+
+				if ( $(gpx).find("trkpt").length == 0 ){
+					alert("ファイルを読み込めません。");
+					return;
+
+				}else{
+					toggleInfo();
+
+					map.eachLayer(function(layer){
+						map.removeLayer(layer);	
+					});
+					map.addLayer(googleHybrid);
+
+					$(gpx).find("trkpt").each(function() {
+						var altitude = parseInt( $(this).find("ele").text() );
+						min_alt = (min_alt == undefined) ? altitude : (min_alt > altitude) ? altitude : min_alt;
+						max_alt = (max_alt == undefined) ? altitude : (max_alt < altitude) ? altitude : max_alt;
+						var time = Date.parse( $(this).find("time").text() );
+
+						track.push({
+							lat: parseFloat( $(this).attr("lat")),
+							lng: parseFloat( $(this).attr("lon") ),
+							altitude: altitude,
+							time: time
+						});
+
+					});
+
+					drawPath(min_alt, max_alt);
+				}
+			}
+
+			function parseJSON(json){
+				track = [];
+				var min_alt, max_alt;
+
+				if (! json.track ){
+					alert("error!");
+					return;
+				}
+
+				$("#overlay").remove();
+				$("#loading").remove();
+				toggleInfo();
+
+				console.log(json);
+				
+				$("#file-name").text(json.name);
+				$("#info-modal-dialog h3").text(json.name);
+
+				for (var i=0; i < json.track.length; i++){
+					var trkp = json.track[i];
+					var altitude = trkp[2];
+					min_alt = (min_alt == undefined) ? altitude : (min_alt > altitude) ? altitude : min_alt;
+					max_alt = (max_alt == undefined) ? altitude : (max_alt < altitude) ? altitude : max_alt;
+
+					track.push({
+						lat: trkp[0],
+						lng: trkp[1],
+						altitude: altitude,
+						time: trkp[3] * 1000
+					});
+
+				}
+
+				drawPath(min_alt, max_alt);
+			}
+
+
+			function track2json() {
+				var json = {
+					name: $("#file-name").text(),
+					track: []
+				};
+
+				for (var i=0; i < track.length; i++){
+					json.track.push([
+						track[i].lat,
+						track[i].lng,
+						track[i].altitude,
+						track[i].time / 1000
+					]);
+				}
+
+				return JSON.stringify(json);
+			}
+
+
+			function pad(n) { return n<10 ? '0'+n : n; }
+
+			// haversine formula 
+			// ref. http://www.movable-type.co.uk/scripts/latlong.html
+			function directTo(p1, p2){
+				var λ1 = p1.lng / 180 * Math.PI;
+				var λ2 = p2.lng / 180 * Math.PI;
+				var φ1 = p1.lat / 180 * Math.PI;
+				var φ2 = p2.lat / 180 * Math.PI;
+
+				var y = Math.sin(λ2 - λ1) * Math.cos(φ2);
+				var x = Math.cos(φ1) * Math.sin(φ2) - 
+					    Math.sin(φ1) * Math.cos(φ2) * Math.cos(λ2 - λ1);
+				var brng = Math.atan2(y, x) / Math.PI * 180;
+				return (brng + 360) % 360;
+			}
+
+			function drawPath(min_alt, max_alt) {
+				var path2 = L.polyline([[ track[0].lat, track[1].lng ]], { wight: 0 });
+
+				var max_alt_up = Math.ceil(max_alt/100)*100;
+				var track_dis = 0;
+				var max_speed = 0;
+
+				var data_alt = [];
+				var data_speed = [];
+
+				var speed_1 = 0, speed_2 = 0;
+
+				for (var i = 0; i < track.length - 1; i++){
+					var path = new L.polyline(
+						[
+							[ track[ i ].lat, track[ i ].lng ],
+							[ track[i+1].lat, track[i+1].lng ]
+						],
+						{
+							color: gradient( (max_alt_up-min_alt == 0) ? 0 : (track[i].altitude - min_alt) / (max_alt_up - min_alt) ),
+							weight: 5,
+							opacity: 1,
+						}
+					).addTo(map);
+
+					path2.addLatLng([ track[i+1].lat, track[i+1].lng ]);
+					var t_i = track[i].time;
+					var d = L.latLng([ track[ i ].lat, track[ i ].lng ]).distanceTo([ track[i+1].lat, track[i+1].lng ]);
+					var t = track[i+1].time - t_i;
+
+					// bugfix: same time track point
+					if (t == 0) continue;
+
+					var speed = (d / t * 1000 + speed_1 + speed_2) / 3;
+					speed_1 = speed_2;
+					speed_2 = speed;
+
+					var date = new Date(track[i].time);
+					path.bindPopup(
+						pad(date.getHours()) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds()) + "<br>" +
+						"altitude: " + Math.round(track[i].altitude) + " m<br>" +
+						"speed: " + Math.round(speed*10)/10 + " m/s<br>" +
+						"direction: " + Math.round(directTo(track[i], track[i+1])) + "°"
+					);
+					track_dis += d;
+					max_speed = (speed > max_speed) ? speed : max_speed;
+
+					t_i += 9 * 3600 * 1000;
+					track[i].date = t_i;
+					data_alt.push([t_i, track[i].altitude ]);
+					data_speed.push([t_i, Math.round(speed*10)/10]);
+				}
+
+				map.fitBounds(path2.getBounds(), (isMobile) ? {} : { paddingBottomRight: [0, 200] });
+
+				// summary
+				var last = track.length - 1;
+				var distance = L.latLng([ track[0].lat, track[0].lng ]).distanceTo([ track[last].lat, track[last].lng ]);
+				var time = track[last].time - track[0].time;
+				var t = new Date(time);
+				var avg_speed = track_dis / time * 1000;
+
+
+				console.log(last);
+
+				$("#time").html(pad(t.getUTCHours()) + ":" + pad(t.getUTCMinutes()) + ":" + pad(t.getUTCSeconds()));
+				$("#track").html( Math.round(track_dis/100) /10 + "<span>km</span>");
+				$("#distance").html( Math.round(distance/100) /10 + "<span>km</span>");
+				$("#avg-speed").html( Math.round(avg_speed*10) /10 + "<span>m/s</span>");
+				$("#max-speed").html( Math.round(max_speed*10) /10 + "<span>m/s</span>");
+				$("#min-alt").html( Math.round(min_alt) + "<span>m</span>");
+				$("#max-alt").html( Math.round(max_alt) + "<span>m</span>");
+				
+
+				drawChart(data_alt, data_speed, track);
+			}
+
+
+
+			//-----------------------------------------------------------------
+			var grad = [
+				{ value:0.00, r:0,   g:0,   b:255 },
+				{ value:0.25, r:0,   g:255, b:255 },
+				{ value:0.50, r:0,   g:255, b:0   },
+				{ value:0.75, r:255, g:255, b:0   },
+				{ value:1.00, r:255, g:0,   b:0   }
+			];
+
+			function gradient(x) {
+				var pivot;
+				for (pivot = 1; pivot < grad.length; pivot++){
+					if ( x <= grad[pivot].value ){
+						break;
+					}
+				}
+
+				var l = grad[pivot-1];
+				var r = grad[pivot];
+
+				var delta = (x - grad[pivot-1].value) / (grad[pivot].value - grad[pivot-1].value);
+
+				var color = {
+					r: Math.round( (r.r - l.r) * delta + l.r ),
+					g: Math.round( (r.g - l.g) * delta + l.g ),
+					b: Math.round( (r.b - l.b) * delta + l.b )
+				};
+
+				return "#" + _doubleHex(color.r) + _doubleHex(color.g) + _doubleHex(color.b);
+			}
+
+			function _doubleHex(x) {
+				return ( x < 16 ) ? "0" + x.toString(16) : x.toString(16);
+			}
+
+
+			//-----------------------------------------------------------------
+			function drawChart(data_alt, data_speed, track) {
+				var marker = L.marker();
+			
+				if ( $(document).height() <= 460 ){
+					$("#chart-container").css({ height: "180px" });
+				}
+
+				$('#chart').highcharts({
+					chart: {
+						zoomType: 'x',
+						width: (isMobile) ? $(document).width() : $(document).width() - 250,
+						height: ($(document).height() <= 460 ) ? 160 
+									            : (isMobile) ? 200
+												             : 190
+					},
+					title: {
+						text: ""  
+					},
+					xAxis: {
+						type: 'datetime',
+					},
+					yAxis: [{
+						title: "",
+						labels: {
+							align: "left",
+							x: 0,
+							y: -2,
+							style: { "font-size": 7 }
+						},
+						min: 0
+					},{
+						title: "",
+						labels: {
+							align: "left",
+							x: -10,
+							y: -2,
+							style: { "font-size": 7 }    
+						},
+						opposite: true,
+						min: 0,
+						minRange: 10
+					}],
+					legend: {
+						enabled: !isMobile,
+						align: "left",
+						layout: "vertical",
+						verticalAlign: "middle"
+					},
+					credits: {
+						enabled: false  
+					},
+					tooltip: {
+						xDateFormat: '%H:%M:%S',
+						shared: true
+					},
+
+					series: [{
+						type: 'line',
+						name: 'altitude(m)',
+						color: "#3498db",
+						yAxis: 0,
+						marker: {
+							enabled: false
+						},
+						data: data_alt
+					},{
+						type: 'line',
+						name: 'speed(m/s)',
+						color: "#e74c3c",
+						yAxis: 1,
+						marker: {
+							enabled: false
+						},
+						data: data_speed
+					}],
+
+					plotOptions: {
+						series: {
+							point: {
+								events: (isMobile) ? {} : {
+									mouseOver: function() {
+										var t = this.x;
+										for (var i = 0; i < track.length-1; i++){
+											if ( track[i].date == t ){
+												break;
+											}
+										}
+										var target = track[i];
+
+										marker.setLatLng([target.lat, target.lng]);
+										marker.addTo(map);
+									},
+									mouseOut: function() {
+										map.removeLayer(marker);
+									}
+								}
+							}
+						}
+					}
+
+				});
+			}
+
+
+
+			//-----------------------------------------------------------------
+			function loading() {
+				var loader = {
+					width: 100,
+					height: 100,
+					stepsPerFrame: 1,
+					trailLength: 1,
+					pointDistance: .025,
+					strokeColor: '#05E2FF',
+					fps: 20,
+					setup: function() {
+						this._.lineWidth = 2;
+					},
+					step: function(point, index) {
+						var cx = this.padding + 50,
+							cy = this.padding + 50,
+							_ = this._,
+							angle = (Math.PI/180) * (point.progress * 360);
+							this._.globalAlpha = Math.max(.5, this.alpha);
+						_.beginPath();
+						_.moveTo(point.x, point.y);
+						_.lineTo(
+							(Math.cos(angle) * 35) + cx,
+							(Math.sin(angle) * 35) + cy
+						);
+						_.closePath();
+						_.stroke();
+						_.beginPath();
+						_.moveTo(
+							(Math.cos(-angle) * 32) + cx,
+							(Math.sin(-angle) * 32) + cy
+						);
+						_.lineTo(
+							(Math.cos(-angle) * 27) + cx,
+							(Math.sin(-angle) * 27) + cy
+						);
+						_.closePath();
+						_.stroke();
+					},
+					path: [
+						['arc', 50, 50, 40, 0, 360]
+					]
+				};
+				var sonic = new Sonic(loader);
+				$("#loading").append(sonic.canvas);
+				sonic.play();
+			}
+
+
+
 		});
+	</script>
 
-		var saga2016 = {
-			name: "Saga2016",
-			bounds: [[33.07754498441214, 129.95346411545185], [33.41060691858563, 130.49726791761674]],
-			zoom: { min: 5, max: 15 },
-			utm: {
-				zone: 52,
-				xmin: 588987,
-				xmax: 639232,
-				ymin: 3660873,
-				ymax: 3697218
-			},
-			url: "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016"
-		};
-		var trackboxMap = new TrackboxMap(saga2016);
-		trackboxMap.addTo(map);
 
-	});
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-57478992-1', 'auto');
+		ga('send', 'pageview');
 	</script>
 </body>
 </html>
