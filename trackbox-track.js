@@ -8,7 +8,6 @@ function TrackboxTrack(json, map) {
 	this._json = json;
 	this.map = map;
 
-	this._retina = window.devicePixelRatio >= 2;
 	this._init(json);
 }
 
@@ -104,7 +103,6 @@ TrackboxTrack.prototype._drawPath = function (){
 	var max_alt_up = Math.ceil(this.summary.max_alt/100) * 100;
 	var min_alt = this.summary.min_alt;
 	var alt_range = max_alt_up - min_alt;
-	var weight = (this._retina) ? 6 : 3;
 	
 	for (var i = 0; i < this.track.length - 1; i++){
 		var color = this._gradient((alt_range == 0) ? 0 : (this.track[i].alt - min_alt) / alt_range);
@@ -112,57 +110,32 @@ TrackboxTrack.prototype._drawPath = function (){
 		var polyline = new google.maps.Polyline({
 			path: [ this.track[i].pos, this.track[i+1].pos ],
 			strokeColor: color,
-			strokeWeight: weight,
+			strokeWeight: 4,
 			strokeOpacity: 1,
+			//clickable: false,
 			map: this.map
 		});
 
+		var self = this;
 		google.maps.event.addListener(polyline, 'click', function(e){
-			console.log(e);
+			self.showInfoWindowFromLatLng(e.latLng.lat(), e.latLng.lng());
 		});
 	}
 };
 
 
-TrackboxTrack.prototype._initPath = function (){
-	var track = this.track;
-	var overlay = new google.maps.OverlayView();
+TrackboxTrack.prototype.showInfoWindowFromLatLng = function (lat, lng){
+	var dis = [];
+	console.log(this.track.length);
 
-	overlay.onAdd = function (){
-		var layer = d3.select(this.getPanes().overlayLayer)
-			.append("div")
-			.attr("class", "svg-overlay")
-			.style("width", 375)
-			.style("height", 667);
-		var svg = layer.append("svg");
-		this._trackLayer = svg.append("g");
-		var projection = this.getProjection();
-		this._project = function (pos) {
-			return projection.fromLatLngToDivPixel(pos);
-		};
+	for (var i = 0; i < this.track.length; i++){
+		var d = Math.pow(this.track[i].lat - lat, 2) + Math.pow(this.track[i].lng - lng, 2);
+		dis.push({ i: i, d: d });
 	};
 
-	overlay.draw = function (){
-		var prev_point = this._project(track[0].pos);
-
-		for (var i = 1; i < track.length; i++){
-			var point = this._project(track[i].pos);
-
-			this._trackLayer.append("line")
-				.attr("x1", prev_point.x)
-				.attr("y1", prev_point.y)
-				.attr("x2", point.x)
-				.attr("y2", point.y)
-				.attr("stroke-width", 4)
-				.attr("stroke", "red");
-
-			prev_point = point;
-		}
-	};
-
-	return overlay;
+	dis.sort(function (a, b) { return a.d - b.d });
+	this.showInfoWindow(dis[0].i);
 };
-
 
 
 TrackboxTrack.prototype.showInfoWindow = function (t){
@@ -171,11 +144,11 @@ TrackboxTrack.prototype.showInfoWindow = function (t){
 	function pad(n) { return n<10 ? '0'+n : n; }
 	var date = new Date(this.track[t].time);
 
-	var content = '<div class="track-info-window" style="font-size:12px; line-height:14px;">' +
+	var content = '<div class="track-info-window" style="font-size:12px; line-height:16px;">' +
 		pad(date.getHours()) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds()) + "<br>" +
 		"altitude: " + Math.round(this.track[t].alt) + " m<br>" +
-		"speed: " + Math.round(this.track[t].speed*10)/10 + " m/s<br>" +
-		"heading: " + Math.round(this.track[t].heading) + "°" +
+		"speed:    " + Math.round(this.track[t].speed*10)/10 + " m/s<br>" +
+		"heading:  " + Math.round(this.track[t].heading) + "°" +
 		'</div>';
 
 	this._infoWindow = new google.maps.InfoWindow({
