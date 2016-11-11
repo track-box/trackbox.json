@@ -4,13 +4,31 @@
  */
 
 /** @constructor */
-function TrackboxTrack(json, map) {
-	this._json = json;
-	this.map = map;
+function TrackboxTrack(url, trackboxMap) {
+	this._url = url;
+	this.trackboxMap = trackboxMap;
+	this.map = trackboxMap.map;
 
-	this._init(json);
-	this._initGoals(json.waypoints);
+	var self = this;
+	this._loadJSON(url, function (data){
+		self.data = data;
+		self._init(data);
+		self._initGoals(data.waypoints);
+	});
 }
+
+
+TrackboxTrack.prototype._loadJSON = function(url, callback) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('get', url, true);
+	xhr.onload = function(){
+		data = JSON.parse(this.responseText);
+		callback(data);
+	};
+	xhr.send(null);
+};
+
+
 
 TrackboxTrack.prototype._init = function(json) {
 	this.track = [];
@@ -113,7 +131,6 @@ TrackboxTrack.prototype._drawPath = function (){
 			strokeColor: color,
 			strokeWeight: 4,
 			strokeOpacity: 1,
-			//clickable: false,
 			map: this.map
 		});
 

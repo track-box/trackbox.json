@@ -4,206 +4,39 @@
 	<meta charset=utf-8 />
 	<title>TrackBox</title>
 	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-	<link rel="stylesheet" href="http://track-box.github.io/trackbox/public/uikit-2.8.0/uikit.almost-flat.min.css" />
-	<link rel="stylesheet" href="app.css" />
+	<style>
+		body { margin:0; padding:0; }
+		#map { position:absolute; top:0; bottom:0; width:100%; }
+	</style>
 </head>
 
 <body>
-	<div id="container">
-		<div class="uk-button-dropdown" data-uk-dropdown>
-			<button id="plane" class="uk-icon-button uk-icon-paper-plane-o"></button>
-		</div>
+	<div id="app"></div>
+	<div id="map"></div>
 
-		<div id="file-name"></div>
-
-		<div id="map"></div>
-
-		<button id="graph-button" class="uk-icon-button uk-icon-bar-chart-o" data-uk-modal="{target:'#info-modal'}"></button>
-
-		<div id="bottom"></div>
-	</div>
-
-	<div id="info-modal" class="uk-modal">
-		<div class="uk-modal-dialog" id="info-modal-dialog">
-			<a class="uk-modal-close uk-close"></a>
-			<h3></h3>
-
-			<div id="info">
-				<div id="chart-container">
-					<div id="chart"></div>
-				</div>
-
-				<div id="summary">
-					<table class="uk-table uk-table-hover">
-						<tr>
-							<th>Time</th>
-							<td id="time"></td>
-						</tr>
-						<tr>
-							<th>Track</th>
-							<td id="track"></td>
-						</tr>
-						<tr>
-							<th>Distance</th>
-							<td id="distance"></td>
-						</tr>
-						<tr>
-							<th>Avg Speed</th>
-							<td id="avg-speed"></td>
-						</tr>
-						<tr>
-							<th>Max Speed</th>
-							<td id="max-speed"></td>
-						</tr>
-						<tr>
-							<th>Min Altitude</th>
-							<td id="min-alt"></td>
-						</tr>
-						<tr>
-							<th>Max Altitude</th>
-							<td id="max-alt"></td>
-						</tr>
-					</table>
-
-				</div>
-			</div>
-
-		</div>
-	</div>
-
-
-	<div id="overlay"></div>
-	<div id="loading"></div>
-
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="http://code.highcharts.com/highcharts.js"></script>
-	<script src="http://track-box.github.io/trackbox/public/uikit-2.8.0/uikit.min.js"></script>
-	<script src="http://track-box.github.io/trackbox/public/sonic.js"></script>
+
 	<script src="//maps.google.com/maps/api/js?v=3&key=AIzaSyChuaneGgTfTzlwUdqAGw7ns6cJTIQEbGg&libraries=geometry"></script>
 	<script src="trackbox-map/trackbox-map.js"></script>
 	<script src="trackbox-track.js"></script>
 
 	<script>
-		$(function(){
-			var track;
-			var isMobile;
-			
-			var saga2016 = {
-				name: "Saga2016",
-				center: [33.252814, 130.245334],
-				bounds: [[33.07754498441214, 129.95346411545185], [33.41060691858563, 130.49726791761674]],
-				zoom: { min: 5, max: 15 },
-				utm: {
-					zone: 52,
-					xmin: 588987,
-					xmax: 639232,
-					ymin: 3660873,
-					ymax: 3697218
-				},
-				url: "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016"
-			};
-			var trackboxMap = new TrackboxMap(saga2016, "map");
-
-
-			//-----------------------------------------------------------------
-			if ( $(document).width() < 640 ){
-				isMobile = true;
-				$("#dropdown").remove();
-
-			}else{
-				isMobile = false;
-				$("#graph-button").hide();
-			}
-			
-			$("#overlay").show();
-			loading();
-		
-			$.ajax({
-				type: "GET",
-				url: "track-20161030am-saga.json",
-				dataType: "json"
-			}).done(parseJSON);
-
-			function toggleInfo() {
-				if ( !isMobile ){
-					$("#bottom").append($("#info"));
-					$("#map").css({ bottom: "200px" });
-					$("#bottom").css({ height: "200px" });
-				}
-			}
-
-			//-----------------------------------------------------------------
-			function parseJSON(json){
-				if (! json.track ){
-					alert("error!");
-					return;
-				}
-
-				$("#overlay").remove();
-				$("#loading").remove();
-				toggleInfo();
-
-				console.log(json);
-				
-				$("#file-name").text(json.name);
-				$("#info-modal-dialog h3").text(json.name);
-
-				track = new TrackboxTrack(json, trackboxMap.map);
-			}
-
-			//-----------------------------------------------------------------
-			function loading() {
-				var loader = {
-					width: 100,
-					height: 100,
-					stepsPerFrame: 1,
-					trailLength: 1,
-					pointDistance: .025,
-					strokeColor: '#05E2FF',
-					fps: 20,
-					setup: function() {
-						this._.lineWidth = 2;
-					},
-					step: function(point, index) {
-						var cx = this.padding + 50,
-							cy = this.padding + 50,
-							_ = this._,
-							angle = (Math.PI/180) * (point.progress * 360);
-							this._.globalAlpha = Math.max(.5, this.alpha);
-						_.beginPath();
-						_.moveTo(point.x, point.y);
-						_.lineTo(
-							(Math.cos(angle) * 35) + cx,
-							(Math.sin(angle) * 35) + cy
-						);
-						_.closePath();
-						_.stroke();
-						_.beginPath();
-						_.moveTo(
-							(Math.cos(-angle) * 32) + cx,
-							(Math.sin(-angle) * 32) + cy
-						);
-						_.lineTo(
-							(Math.cos(-angle) * 27) + cx,
-							(Math.sin(-angle) * 27) + cy
-						);
-						_.closePath();
-						_.stroke();
-					},
-					path: [
-						['arc', 50, 50, 40, 0, 360]
-					]
-				};
-				var sonic = new Sonic(loader);
-				$("#loading").append(sonic.canvas);
-				sonic.play();
-			}
-
-
-
-		});
+		var saga2016 = {
+			name: "Saga2016",
+			center: [33.252814, 130.245334],
+			bounds: [[33.07754498441214, 129.95346411545185], [33.41060691858563, 130.49726791761674]],
+			zoom: { min: 5, max: 15 },
+			utm: {
+				zone: 52,
+				xmin: 588987,
+				xmax: 639232,
+				ymin: 3660873,
+				ymax: 3697218
+			},
+			url: "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016"
+		};
+		var trackboxMap = new TrackboxMap(saga2016, "map");	
+		var track = new TrackboxTrack("track-20161030am-saga.json", trackboxMap);
 	</script>
-
-
 </body>
 </html>
