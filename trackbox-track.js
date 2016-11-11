@@ -9,6 +9,7 @@ function TrackboxTrack(json, map) {
 	this.map = map;
 
 	this._init(json);
+	this._initGoals(json.waypoints);
 }
 
 TrackboxTrack.prototype._init = function(json) {
@@ -194,4 +195,15 @@ TrackboxTrack.prototype._doubleHex = function(x) {
 	return ( x < 16 ) ? "0" + x.toString(16) : x.toString(16);
 };
 
+
+TrackboxTrack.prototype._initGoals = function(waypoints) {
+	for (var key in waypoints){
+		var waypoint = waypoints[key];
+
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(waypoint.lat, waypoint.lon),
+			map: this.map
+		});
+	}
+};
 
