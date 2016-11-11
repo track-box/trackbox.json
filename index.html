@@ -88,17 +88,9 @@
 			var track;
 			var isMobile;
 			
-			var map = new google.maps.Map(document.getElementById('map'), {
-				mapTypeId: google.maps.MapTypeId.HYBRID,
-				center: new google.maps.LatLng(33.252814, 130.245334),
-				zoom: 12,
-				mapTypeControl: false,
-				zoomControl: false,
-				streetViewControl: false
-			});
-
 			var saga2016 = {
 				name: "Saga2016",
+				center: [33.252814, 130.245334],
 				bounds: [[33.07754498441214, 129.95346411545185], [33.41060691858563, 130.49726791761674]],
 				zoom: { min: 5, max: 15 },
 				utm: {
@@ -110,8 +102,7 @@
 				},
 				url: "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016"
 			};
-			var trackboxMap = new TrackboxMap(saga2016);
-			trackboxMap.addTo(map);
+			var trackboxMap = new TrackboxMap(saga2016, "map");
 
 
 			//-----------------------------------------------------------------
@@ -157,7 +148,7 @@
 				$("#file-name").text(json.name);
 				$("#info-modal-dialog h3").text(json.name);
 
-				track = new TrackboxTrack(json, map);
+				track = new TrackboxTrack(json, trackboxMap.map);
 			}
 
 			//-----------------------------------------------------------------
