@@ -11,7 +11,7 @@ const style = {
 };
 
 const iconStyle = {
-	width: "32px",
+	width: "28px",
 	marginRight: "2px"
 };
 
