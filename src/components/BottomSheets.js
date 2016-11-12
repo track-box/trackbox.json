@@ -100,7 +100,7 @@ function getStyles(props, context) {
       bottom: 0,
       left: open ? 0 : -10000,
       width: '100%',
-      height: '100%',
+      height: 'inherit',
       transition: open ?
         transitions.easeOut('0ms', 'left', '0ms') :
         transitions.easeOut('0ms', 'left', '450ms'),
@@ -110,9 +110,10 @@ function getStyles(props, context) {
       WebkitTapHighlightColor: 'rgba(0,0,0,0)', // Remove mobile color flashing (deprecated)
       transition: transitions.easeOut(),
       position: 'relative',
-      width: '75%',
+      width: '100%',
       maxWidth: spacing.desktopKeylineIncrement * 12,
       margin: '0 auto',
+	  marginBottom: '-100%',
       zIndex: zIndex.dialog,
     },
     actionsContainer: {
