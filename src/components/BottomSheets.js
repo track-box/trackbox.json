@@ -38,7 +38,7 @@ class TransitionItem extends Component {
     this.setState({
       style: {
         opacity: 1,
-        transform: `translate(0, ${spacing.desktopKeylineIncrement}px)`,
+        transform: `translate(0, -100%)`,
       },
     });
 
@@ -97,7 +97,7 @@ function getStyles(props, context) {
       boxSizing: 'border-box',
       WebkitTapHighlightColor: 'rgba(0,0,0,0)', // Remove mobile color flashing (deprecated)
       zIndex: zIndex.dialog,
-      top: 0,
+      bottom: 0,
       left: open ? 0 : -10000,
       width: '100%',
       height: '100%',
@@ -126,6 +126,7 @@ function getStyles(props, context) {
     },
     overlay: {
       zIndex: zIndex.dialogOverlay,
+      backgroundColor: 'rgba(0, 0, 0, 0.441176)',
     },
     title: {
       margin: 0,
@@ -331,7 +332,7 @@ class DialogInline extends Component {
               className={contentClassName}
               style={styles.content}
             >
-              <Paper zDepth={4}>
+              <Paper zDepth={2}>
                 {titleElement}
                 <div
                   ref="dialogContent"
