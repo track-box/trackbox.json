@@ -3,7 +3,7 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import {blue500, grey50, grey600} from 'material-ui/styles/colors';
 import BottomSheets from './BottomSheets';
 import ConsoleFAB from './ConsoleFAB';
-import TrackDataTable from './TrackDataTable';
+import TrackDataTableContainer from '../containers/TrackDataTable';
 
 const styles = {
 	content: {
@@ -43,7 +43,7 @@ export default class Console extends React.Component {
 				>
 					<Tabs inkBarStyle={styles.inkBar} >
 						<Tab label="Data" style={styles.tab}>
-							<TrackDataTable />
+							<TrackDataTableContainer />
 						</Tab>
 						<Tab label="Graph" style={styles.tab}>
 							<div>

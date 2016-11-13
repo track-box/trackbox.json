@@ -1,32 +1,28 @@
 import { combineReducers } from 'redux'
-import { ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters } from './actions'
 
-function todos(state = [], action) {
+const defaultTrackData = {
+	date: "2016.00.00",
+	time: "00:00:00",
+	track: "0.0",
+	distance: "0.0",
+	avgSpeed: "-",
+	maxSpeed: "-",
+	minAltitude: "-",
+	maxAltitude: "-"
+}
+
+function trackData(state = defaultTrackData, action) {
 	switch (action.type) {
-		case ADD_TODO:
-			return [
-				...state,
-				{
-					text: action.text,
-					completed: false
-				}
-			]
-		case TOGGLE_TODO:
-				return state.map((todo, index) => {
-					if (index === action.index) {
-						return Object.assign({}, todo, {
-							completed: !todo.completed
-						})
-					}
-					return todo
-				})
+		case 'SET_TRACKDATA':
+			return Object.assign({}, state, action.data)
+
 		default:
-				return state
+			return state
 	}
 }
 
-const todoApp = combineReducers({
-	  todos
+const reducer = combineReducers({
+	  trackData
 })
 
-export default todoApp
+export default reducer
