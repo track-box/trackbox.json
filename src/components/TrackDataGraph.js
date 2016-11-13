@@ -5,7 +5,7 @@ import Highcharts from 'react-highcharts'
 const config = {
 	chart: {
 		zoomType: 'x',
-		height: 280,
+		height: 240,
 	    spacingTop: 20,
 	    spacingBottom: 4
 	},
