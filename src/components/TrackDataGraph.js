@@ -54,7 +54,7 @@ const config = {
 		marker: {
 			enabled: false
 		},
-		data: [[0, 100]]
+		data: []
 	},{
 		type: 'line',
 		name: 'speed(m/s)',
@@ -63,12 +63,15 @@ const config = {
 		marker: {
 			enabled: false
 		},
-		data: [[0, 10]]
+		data: []
 	}],
 }
 
 
 const TrackDataGraph = ({ data }) => {
+	config.series[0].data = data.alt
+	config.series[1].data = data.speed
+
 	return (
 		<Highcharts config = {config} ></Highcharts>
 	)

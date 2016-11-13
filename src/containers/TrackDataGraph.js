@@ -4,7 +4,7 @@ import TrackDataGraph from '../components/TrackDataGraph'
 
 const mapStateToProps = (state) => {
 	return {
-		data: state.graphData
+		data: state.trackGraph
 	}
 }
 

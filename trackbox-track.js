@@ -119,7 +119,9 @@ TrackboxTrack.prototype._init = function(json) {
 	});
 
 	this._drawPath();
+
 	this._setTrackData();
+	this._setTrackGraph();
 };
 			
 TrackboxTrack.prototype._setTrackData = function (){
@@ -143,6 +145,19 @@ TrackboxTrack.prototype._setTrackData = function (){
 	};
 
 	window.trackboxReact.setTrackData(trackData);
+};
+
+
+TrackboxTrack.prototype._setTrackGraph = function (){
+	var alt = [], speed = [];
+
+	for (var i = 0; i < this.track.length; i++){
+		var t = this.track[i].time + 9 * 3600 * 1000;
+		alt.push([t, this.track[i].alt]);
+		speed.push([t, Math.round(this.track[i].speed * 10) / 10]);
+	}
+
+	window.trackboxReact.setTrackGraph({ alt: alt, speed: speed });
 };
 
 

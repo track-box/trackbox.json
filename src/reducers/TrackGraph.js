@@ -5,7 +5,7 @@ const defaultData = {
 
 function trackGraph(state = defaultData, action) {
 	switch (action.type) {
-		case 'SET_TRACKGRAPH':
+		case 'SET_TRACK_GRAPH':
 			return Object.assign({}, state, action.data)
 
 		default:
