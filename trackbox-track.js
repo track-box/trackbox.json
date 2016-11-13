@@ -4,14 +4,17 @@
  */
 
 /** @constructor */
-function TrackboxTrack(url, trackboxMap) {
+function TrackboxTrack(url, div_id) {
 	this._url = url;
-	this.trackboxMap = trackboxMap;
-	this.map = trackboxMap.map;
 
 	var self = this;
 	this._loadJSON(url, function (data){
 		self.data = data;
+
+		var trackboxMap = new TrackboxMap(data.map, div_id);
+		self.trackboxMap = trackboxMap;
+		self.map = trackboxMap.map;
+
 		self._init(data);
 		self._initGoals(data.waypoints);
 	});
