@@ -49,7 +49,7 @@ const config = {
 	series: [{
 		type: 'line',
 		name: 'altitude(m)',
-		color: "#3498db",
+		color: "#2196F3",
 		yAxis: 0,
 		marker: {
 			enabled: false
@@ -58,7 +58,7 @@ const config = {
 	},{
 		type: 'line',
 		name: 'speed(m/s)',
-		color: "#e74c3c",
+		color: "#E91E63",
 		yAxis: 1,
 		marker: {
 			enabled: false
