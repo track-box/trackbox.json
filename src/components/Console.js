@@ -4,6 +4,7 @@ import {blue500, grey50, grey600} from 'material-ui/styles/colors';
 import BottomSheets from './BottomSheets';
 import ConsoleFAB from './ConsoleFAB';
 import TrackDataTableContainer from '../containers/TrackDataTable';
+import TrackDataGraphContainer from '../containers/TrackDataGraph';
 
 const styles = {
 	content: {
@@ -34,16 +35,12 @@ export default class Console extends React.Component {
 					open={this.state.open}
 					onRequestClose={this.handleClose}
 				>
-					<Tabs inkBarStyle={styles.inkBar} >
-						<Tab label="Data" style={styles.tab}>
+					<Tabs>
+						<Tab label="Data">
 							<TrackDataTableContainer />
 						</Tab>
-						<Tab label="Graph" style={styles.tab}>
-							<div>
-							<p>
-							This is another example tab.
-							</p>
-							</div>
+						<Tab label="Graph">
+							<TrackDataGraphContainer />
 						</Tab>
 					</Tabs>
 				</BottomSheets>
