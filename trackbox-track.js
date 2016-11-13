@@ -117,9 +117,34 @@ TrackboxTrack.prototype._init = function(json) {
 		north: max_lat,
 		south: min_lat
 	});
+
 	this._drawPath();
+	this._setTrackData();
 };
 			
+TrackboxTrack.prototype._setTrackData = function (){
+	function pad(n) { return n<10 ? '0'+n : n; }
+
+	var date = new Date(this.track[0].time);
+	var date_str = date.getFullYear() + "." + pad(date.getMonth() + 1) + "." + pad(date.getDate());
+
+	var t = new Date(this.summary.time);
+	var time_str = pad(t.getUTCHours()) + ":" + pad(t.getUTCMinutes()) + ":" + pad(t.getUTCSeconds());
+
+	var trackData = {
+		date: date_str,
+		time: time_str,
+		track: Math.round(this.summary.track_distance / 100) / 10, // 0.0 km
+		distance: Math.round(this.summary.distance / 100) / 10, // 0.0 km
+		avgSpeed: Math.round(this.summary.avg_speed * 10) / 10, // 0.0 m/s
+		maxSpeed: Math.round(this.summary.max_speed * 10) / 10, // 0.0 m/s
+		minAltitude: Math.round(this.summary.min_alt), // 0 m
+		maxAltitude: Math.round(this.summary.max_alt) // 0 m
+	};
+
+	window.trackboxReact.setTrackData(trackData);
+};
+
 
 TrackboxTrack.prototype._drawPath = function (){
 	var max_alt_up = Math.ceil(this.summary.max_alt/100) * 100;

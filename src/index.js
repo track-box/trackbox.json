@@ -17,5 +17,9 @@ render(
 )
 
 
-store.dispatch(setTrackData({ date: "2016.11.11" }))
+window.trackboxReact = {
+	setTrackData: function (data) {
+		store.dispatch(setTrackData(data))
+	}
+}
 
