@@ -8,13 +8,6 @@ import TrackDataTableContainer from '../containers/TrackDataTable';
 const styles = {
 	content: {
 		padding: 0
-	},
-	tab: {
-		backgroundColor: grey50,
-		color: grey600,
-	},
-	inkBar: {
-		backgroundColor: blue500
 	}
 };
 
