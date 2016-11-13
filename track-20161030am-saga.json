@@ -16,7 +16,7 @@
 		"url": "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016"
 	},
 	"last_update": 1477785604,
-	"waypoints": {
+	"goals": {
 		"03PDG": {
 			"lat": 33.24385427343142,
 			"lon": 130.23226589431107,

@@ -16,7 +16,7 @@ function TrackboxTrack(url, div_id) {
 		self.map = trackboxMap.map;
 
 		self._init(data);
-		self._initGoals(data.waypoints);
+		self._initGoals(data.goals);
 	});
 }
 
@@ -216,12 +216,14 @@ TrackboxTrack.prototype._doubleHex = function(x) {
 };
 
 
-TrackboxTrack.prototype._initGoals = function(waypoints) {
-	for (var key in waypoints){
-		var waypoint = waypoints[key];
+TrackboxTrack.prototype._initGoals = function(goals) {
+	this._goals = {};
 
-		var pos = new google.maps.LatLng(waypoint.lat, waypoint.lon);
-		var goal = new TrackboxGoal(key, pos, this.map);
+	for (var key in goals){
+		var goal = goals[key];
+
+		var pos = new google.maps.LatLng(goal.lat, goal.lon);
+		this._goals[key] = new TrackboxGoal(key, pos, this.map);
 	}
 };
 
