@@ -4,7 +4,7 @@ import TrackDataTable from '../components/TrackDataTable'
 
 const mapStateToProps = (state) => {
 	return {
-		data: state.trackData
+		data: state.trackDataSummary
 	}
 }
 

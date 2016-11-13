@@ -1,6 +1,4 @@
-import { combineReducers } from 'redux'
-
-const defaultTrackData = {
+const defaultData = {
 	date: "2016.00.00",
 	time: "00:00:00",
 	track: "0.0",
@@ -11,7 +9,7 @@ const defaultTrackData = {
 	maxAltitude: "-"
 }
 
-function trackData(state = defaultTrackData, action) {
+function trackDataSummary(state = defaultData, action) {
 	switch (action.type) {
 		case 'SET_TRACKDATA':
 			return Object.assign({}, state, action.data)
@@ -21,8 +19,4 @@ function trackData(state = defaultTrackData, action) {
 	}
 }
 
-const reducer = combineReducers({
-	  trackData
-})
-
-export default reducer
+export default trackDataSummary
