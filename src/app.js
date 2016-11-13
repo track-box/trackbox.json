@@ -1,13 +1,18 @@
+// react
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+// material ui
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import TrackboxFAB from './components/TrackboxFAB';
-import Console from './components/Console';
-
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
+
+// my component
+import TrackboxFAB from './components/TrackboxFAB';
+import Console from './components/Console';
+
 
 const App = () => (
 	<MuiThemeProvider>
@@ -18,8 +23,4 @@ const App = () => (
 	</MuiThemeProvider>
 );
 
-ReactDOM.render(
-	<App />,
-	document.getElementById('app')
-);
-
+export default App;
