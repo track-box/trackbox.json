@@ -2,10 +2,10 @@ import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import EventListener from 'react-event-listener';
 import keycode from 'keycode';
-import transitions from '../../node_modules/material-ui/styles/transitions';
-import Overlay from '../../node_modules/material-ui/internal/Overlay';
-import RenderToLayer from '../../node_modules/material-ui/internal/RenderToLayer';
-import Paper from '../../node_modules/material-ui/Paper';
+import transitions from '../../../node_modules/material-ui/styles/transitions';
+import Overlay from '../../../node_modules/material-ui/internal/Overlay';
+import RenderToLayer from '../../../node_modules/material-ui/internal/RenderToLayer';
+import Paper from '../../../node_modules/material-ui/Paper';
 
 import ReactTransitionGroup from 'react-addons-transition-group';
 

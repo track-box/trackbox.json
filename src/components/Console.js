@@ -1,7 +1,7 @@
 import React from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import {blue500, grey50, grey600} from 'material-ui/styles/colors';
-import BottomSheets from './BottomSheets';
+import BottomSheets from './material/BottomSheets';
 import ConsoleFAB from './ConsoleFAB';
 import TrackDataTableContainer from '../containers/TrackDataTable';
 import TrackDataGraphContainer from '../containers/TrackDataGraph';
