@@ -5,7 +5,7 @@ import { createStore } from 'redux'
 import reducer from './reducers'
 import App from './app'
 
-import { setTrackData, setTrackGraph } from './actions'
+import { setTrackData, setTrackGraph, showTrackGoal } from './actions'
 
 let store = createStore(reducer)
 
@@ -23,6 +23,9 @@ window.trackboxReact = {
 	},
 	setTrackGraph: function (data) {
 		store.dispatch(setTrackGraph(data))
+	},
+	showTrackGoal: function (goal) {
+		store.dispatch(showTrackGoal(goal))
 	}
 }
 

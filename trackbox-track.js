@@ -187,8 +187,6 @@ TrackboxTrack.prototype._drawPath = function (){
 
 TrackboxTrack.prototype.showInfoWindowFromLatLng = function (lat, lng){
 	var dis = [];
-	console.log(this.track.length);
-
 	for (var i = 0; i < this.track.length; i++){
 		var d = Math.pow(this.track[i].lat - lat, 2) + Math.pow(this.track[i].lng - lng, 2);
 		dis.push({ i: i, d: d });
@@ -275,16 +273,17 @@ TrackboxTrack.prototype._initGoals = function(goals) {
 		var goal = goals[key];
 
 		var pos = new google.maps.LatLng(goal.lat, goal.lon);
-		this._goals[key] = new TrackboxGoal(key, pos, this.map);
+		this._goals[key] = new TrackboxGoal(key, pos, goal, this.map);
 	}
 };
 
 
 TrackboxGoal.prototype = new google.maps.OverlayView();
 
-function TrackboxGoal(name, pos, map) {
+function TrackboxGoal(name, pos, goal, map) {
 	this._name = name;
 	this._pos = pos;
+	this._data = goal;
 	this.map = map;
 	this.setMap(map);
 };
@@ -306,7 +305,15 @@ TrackboxGoal.prototype.onAdd = function() {
 		'<circle cx="20" cy="10" r="3" stroke="#e91e63" stroke-width="2" fill="none" />' +
 		'</svg>';
 
-	this._div.onclick = function () {};
+	var name = this._name;
+	var sub = (this._data.number) ? this._data.number : 
+				(this._data.coord) ? this._data.coord : '';
+
+	this._div.onclick = function (e) {
+		e.preventDefault();
+		window.trackboxReact.showTrackGoal({ name: name, sub: sub });
+		return false;
+	};
 
 	var panes = this.getPanes();
 	panes.overlayMouseTarget.appendChild(this._div);
