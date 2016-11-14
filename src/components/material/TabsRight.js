@@ -6,8 +6,8 @@ import React, {Component,
   PropTypes,
 } from 'react';
 import warning from 'warning';
-import TabTemplate from './TabTemplate';
-import InkBar from './InkBar';
+import TabTemplate from '../../../node_modules/material-ui/Tabs/TabTemplate';
+import InkBar from '../../../node_modules/material-ui/Tabs/InkBar';
 
 function getStyles(props, context) {
   const {tabs} = context.muiTheme;
@@ -236,12 +236,14 @@ class Tabs extends Component {
         style={prepareStyles(Object.assign({}, style))}
         {...other}
       >
-        <div style={prepareStyles(Object.assign(styles.tabItemContainer, tabItemContainerStyle))}>
-          {tabs}
-        </div>
-        <div style={{width: inkBarContainerWidth}}>
-          {inkBar}
-        </div>
+	    <div style={{ paddingRight:"48px" }}>
+			<div style={prepareStyles(Object.assign(styles.tabItemContainer, tabItemContainerStyle))}>
+			  {tabs}
+			</div>
+			<div style={{width: inkBarContainerWidth}}>
+			  {inkBar}
+			</div>
+		</div>
         <div
           style={prepareStyles(Object.assign({}, contentContainerStyle))}
           className={contentContainerClassName}

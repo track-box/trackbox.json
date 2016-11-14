@@ -1,7 +1,8 @@
 import React from 'react';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import {Tab} from 'material-ui/Tabs';
 import {blue500, grey50, grey600} from 'material-ui/styles/colors';
-import BottomSheets from './material/BottomSheets';
+import BottomSheetsWithCloseButton from './material/BottomSheetsWithCloseButton';
+import TabsRight from './material/TabsRight';
 import ConsoleFAB from './ConsoleFAB';
 import TrackDataTableContainer from '../containers/TrackDataTable';
 import TrackDataGraphContainer from '../containers/TrackDataGraph';
@@ -29,21 +30,21 @@ export default class Console extends React.Component {
 		return (
 			<div>
 				<ConsoleFAB onTouchTap={this.handleOpen} />
-				<BottomSheets
+				<BottomSheetsWithCloseButton
 					bodyStyle={styles.content}
 					modal={false}
 					open={this.state.open}
 					onRequestClose={this.handleClose}
 				>
-					<Tabs>
+					<TabsRight>
 						<Tab label="Data">
 							<TrackDataTableContainer />
 						</Tab>
 						<Tab label="Graph">
 							<TrackDataGraphContainer />
 						</Tab>
-					</Tabs>
-				</BottomSheets>
+					</TabsRight>
+				</BottomSheetsWithCloseButton>
 			</div>
 		);
 	}

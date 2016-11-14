@@ -9,6 +9,9 @@ import Paper from '../../../node_modules/material-ui/Paper';
 
 import ReactTransitionGroup from 'react-addons-transition-group';
 
+import IconButton from 'material-ui/IconButton';
+import {blue500, grey50, grey600} from 'material-ui/styles/colors';
+
 class TransitionItem extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -343,16 +346,31 @@ class DialogInline extends Component {
                   {children}
                 </div>
                 {actionsContainer}
+				<IconButton
+					iconClassName="material-icons"
+          			onTouchTap={this.handleTouchTapOverlay}
+					style={{
+						position: "absolute",
+						top: 0,
+						right: 0,
+						width: 48,
+						height: 48,
+						padding: 16,
+						backgroundColor: grey50
+					}}
+					iconStyle={{
+						width: 16,
+						height: 16,
+						fontSize: 16,
+						color: grey600
+					}}
+				>
+					clear
+				</IconButton>
               </Paper>
             </TransitionItem>
           }
         </ReactTransitionGroup>
-        <Overlay
-          show={open}
-          className={overlayClassName}
-          style={styles.overlay}
-          onTouchTap={this.handleTouchTapOverlay}
-        />
       </div>
     );
   }
