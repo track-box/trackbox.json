@@ -65,6 +65,20 @@ const config = {
 		},
 		data: []
 	}],
+	plotOptions: {
+		series: {
+			point: {
+				events: {
+					mouseOver: function() {
+						window.track.showMarker(this.index);
+					},
+					mouseOut: function() {
+						window.track.hideMarker();
+					}
+				}
+			}
+		}
+	}
 }
 
 

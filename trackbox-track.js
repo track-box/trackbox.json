@@ -219,6 +219,18 @@ TrackboxTrack.prototype.showInfoWindow = function (t){
 	this._infoWindow.open(this.map);
 };
 
+TrackboxTrack.prototype.showMarker = function (t){
+	if (!this._marker) {
+		this._marker = new google.maps.Marker();
+	}
+
+	this._marker.setPosition(this.track[t].pos);
+	this._marker.setMap(this.map);
+};
+
+TrackboxTrack.prototype.hideMarker = function (){
+	if (this._marker) this._marker.setMap(null);
+};
 
 TrackboxTrack.prototype._gradient = function(x) {
 	var grad = [
