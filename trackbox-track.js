@@ -17,6 +17,8 @@ function TrackboxTrack(url, div_id) {
 
 		self._init(data);
 		self._initGoals(data.goals);
+
+		trackboxMap.setTitle(data.name);
 	});
 }
 
@@ -134,6 +136,7 @@ TrackboxTrack.prototype._setTrackData = function (){
 	var time_str = pad(t.getUTCHours()) + ":" + pad(t.getUTCMinutes()) + ":" + pad(t.getUTCSeconds());
 
 	var trackData = {
+		name: this.data.name,
 		date: date_str,
 		time: time_str,
 		track: Math.round(this.summary.track_distance / 100) / 10, // 0.0 km

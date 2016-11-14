@@ -12,7 +12,11 @@ const styles = {
 const TrackDataTable = ({ data }) => (
 	<Table selectable={false} height={"240px"} style={styles.table}>
 		<TableBody displayRowCheckbox={false}>
-			<TableRow style={styles.row}>
+			<TableRow>
+				<TableRowColumn>Title</TableRowColumn>
+				<TableRowColumn>{data.name}</TableRowColumn>
+			</TableRow>
+			<TableRow>
 				<TableRowColumn>Date</TableRowColumn>
 				<TableRowColumn>{data.date}</TableRowColumn>
 			</TableRow>
