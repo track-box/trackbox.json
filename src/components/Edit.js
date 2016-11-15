@@ -1,7 +1,8 @@
 import React from 'react';
 import BottomSheets from './material/BottomSheets';
 import EditFAB from './EditFAB';
-import EditList from './EditList';
+import EditListContainer from '../containers/EditList';
+import AddGoalContainer from '../containers/AddGoal'
 
 const styles = {
 	content: {
@@ -34,8 +35,9 @@ export default class Edit extends React.Component {
 					open={this.state.open}
 					onRequestClose={this.handleClose}
 				>
-					<EditList />
+					<EditListContainer onSelected={this.handleClose} />
 				</BottomSheets>
+				<AddGoalContainer />
 			</div>
 		);
 	}

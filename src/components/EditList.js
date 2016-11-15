@@ -4,13 +4,14 @@ import Divider from 'material-ui/Divider';
 import FontIcon from 'material-ui/FontIcon';
 import {grey800} from 'material-ui/styles/colors';
 
+
 const styles = {
 	item: {
 		color: grey800
 	}
 };
 
-const EditList = () => (
+const EditList = (props) => (
 	<div>
 		<List>
 			<ListItem primaryText="Add goal" 
@@ -18,7 +19,10 @@ const EditList = () => (
 				leftIcon={
 					<FontIcon className="material-icons">room</FontIcon>
 				}
-				onTouchTap={() => console.log("add goal") }
+				onTouchTap={() => {
+					props.showAddGoal()
+					props.onSelected()
+				}}
 			/>
 		</List>
 		<Divider />

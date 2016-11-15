@@ -16,3 +16,11 @@ export const showTrackGoal = (goal) => ({
 export const hideTrackGoal = () => ({
 	type: 'HIDE_TRACK_GOAL'
 })
+
+export const showAddGoal = () => ({
+	type: 'SHOW_ADD_GOAL'
+})
+
+export const hideAddGoal = () => ({
+	type: 'HIDE_ADD_GOAL'
+})
