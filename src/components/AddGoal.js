@@ -36,14 +36,10 @@ export default class AddGoal extends React.Component {
 
 		return (
 			<Dialog
-				title="Add goal"
 				actions={actions}
 				modal={false}
 				open={show}
 				onRequestClose={() => onClose()}
-				titleStyle={{
-					paddingBottom: 0
-				}}
 			>
 				<TextField
 					value={this.state.value}

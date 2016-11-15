@@ -13,19 +13,27 @@ const styles = {
 
 const EditList = (props) => (
 	<div>
-		<List>
-			<ListItem primaryText="Add goal" 
-				innerDivStyle={styles.item}
-				leftIcon={
-					<FontIcon className="material-icons">room</FontIcon>
-				}
-				onTouchTap={() => {
-					props.showAddGoal()
-					props.onSelected()
-				}}
-			/>
-		</List>
-		<Divider />
+		{(() => {
+			if (props.mapSelected){
+				return (
+					<div>
+						<List>
+							<ListItem primaryText="Add goal" 
+								innerDivStyle={styles.item}
+								leftIcon={
+									<FontIcon className="material-icons">room</FontIcon>
+								}
+								onTouchTap={() => {
+									props.showAddGoal()
+									props.onSelected()
+								}}
+							/>
+						</List>
+						<Divider />
+					</div>
+				)
+			}
+		})()}
 		<List>
 			<ListItem primaryText="Save" innerDivStyle={styles.item} leftIcon={
 				<FontIcon className="material-icons">save</FontIcon>

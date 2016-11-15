@@ -3,7 +3,9 @@ import EditList from '../components/EditList'
 import { showAddGoal, showSelectMap } from '../actions'
 
 const mapStateToProps = (state) => {
-	return {}
+	return {
+		mapSelected: state.selectMap.map != "none"
+	}
 }
 
 const mapDispatchToProps = (dispatch) => {
