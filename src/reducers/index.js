@@ -4,13 +4,15 @@ import trackGraph from './TrackGraph'
 import trackGoal from './TrackGoal'
 import addGoal from './AddGoal'
 import selectMap from './SelectMap'
+import rename from './Rename'
 
 const reducer = combineReducers({
 	trackDataSummary,
 	trackGraph,
 	trackGoal,
 	addGoal,
-	selectMap
+	selectMap,
+	rename,
 })
 
 export default reducer

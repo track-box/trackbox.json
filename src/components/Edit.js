@@ -4,6 +4,7 @@ import EditFAB from './EditFAB';
 import EditListContainer from '../containers/EditList';
 import AddGoalContainer from '../containers/AddGoal'
 import SelectMapContainer from '../containers/SelectMap'
+import RenameContainer from '../containers/Rename'
 
 const styles = {
 	content: {
@@ -40,6 +41,7 @@ export default class Edit extends React.Component {
 				</BottomSheets>
 				<AddGoalContainer />
 				<SelectMapContainer />
+				<RenameContainer />
 			</div>
 		);
 	}

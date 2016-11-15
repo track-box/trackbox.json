@@ -37,3 +37,12 @@ export const mapChanged = (map) => ({
 	type: 'MAP_CHANGED',
 	map: map
 })
+
+export const showRename = () => ({
+	type: 'SHOW_RENAME'
+})
+
+export const hideRename = () => ({
+	type: 'HIDE_RENAME'
+})
+

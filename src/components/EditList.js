@@ -44,9 +44,16 @@ const EditList = (props) => (
 		</List>
 		<Divider />
 		<List>
-			<ListItem primaryText="Rename" innerDivStyle={styles.item} leftIcon={
-				<FontIcon className="material-icons">edit</FontIcon>
-			} />
+			<ListItem primaryText="Rename"
+				innerDivStyle={styles.item}
+				leftIcon={
+					<FontIcon className="material-icons">edit</FontIcon>
+				}
+				onTouchTap={() => {
+					props.showRename()
+					props.onSelected()
+				}}
+			/>
 			<ListItem primaryText="Select map"
 				innerDivStyle={styles.item}
 				leftIcon={

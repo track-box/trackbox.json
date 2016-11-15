@@ -1,4 +1,5 @@
 const defaultData = {
+	name: "",
 	date: "2016.00.00",
 	time: "00:00:00",
 	track: "0.0",
