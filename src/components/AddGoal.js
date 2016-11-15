@@ -4,6 +4,25 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 
 export default class AddGoal extends React.Component {
+	state = {
+		value: "",
+	}
+
+	handleChange = (event) => {
+		this.setState({
+			value: event.target.value,
+		})
+	}
+
+	handleSubmit = () => {
+		console.log(this.state.value)
+		this.props.onClose()
+
+		this.setState({
+			value: "",
+		})
+	}
+
 	render() {
 		let { show, onClose } = this.props
 
@@ -11,7 +30,7 @@ export default class AddGoal extends React.Component {
 			<FlatButton
 				label="Add"
 				primary={true}
-				onTouchTap={() => onClose()}
+				onTouchTap={this.handleSubmit}
 			/>,
 		];
 
@@ -27,6 +46,8 @@ export default class AddGoal extends React.Component {
 				}}
 			>
 				<TextField
+					value={this.state.value}
+					onChange={this.handleChange}
 					hintText="302 or 16008000"
 					floatingLabelText="Goal number or Digit"
 					keyboardFocused={true}
