@@ -40,6 +40,12 @@ export default class AddGoal extends React.Component {
 				modal={false}
 				open={show}
 				onRequestClose={() => onClose()}
+				contentStyle={{
+					position: "absolute",
+					top: 30,
+					left: 0,
+					right: 0
+				}}
 			>
 				<TextField
 					value={this.state.value}
@@ -51,6 +57,7 @@ export default class AddGoal extends React.Component {
 						width: "100%",
 						margin: "auto"
 					}}
+					autoFocus
 				/>
 			</Dialog>
 		)
