@@ -15,7 +15,8 @@ const iconStyle = {
 };
 
 const ConsoleFAB = (props) => {
-	if (/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase()) && 
+	if (props.mini &&
+		/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase()) && 
 		/twitter|fbav|line/.test(navigator.userAgent.toLowerCase())){
 		style.bottom = 100
 	}
