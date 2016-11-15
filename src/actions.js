@@ -24,3 +24,16 @@ export const showAddGoal = () => ({
 export const hideAddGoal = () => ({
 	type: 'HIDE_ADD_GOAL'
 })
+
+export const showSelectMap = () => ({
+	type: 'SHOW_SELECT_MAP'
+})
+
+export const hideSelectMap = () => ({
+	type: 'HIDE_SELECT_MAP'
+})
+
+export const mapChanged = (map) => ({
+	type: 'MAP_CHANGED',
+	map: map
+})

@@ -3,6 +3,7 @@ import BottomSheets from './material/BottomSheets';
 import EditFAB from './EditFAB';
 import EditListContainer from '../containers/EditList';
 import AddGoalContainer from '../containers/AddGoal'
+import SelectMapContainer from '../containers/SelectMap'
 
 const styles = {
 	content: {
@@ -38,6 +39,7 @@ export default class Edit extends React.Component {
 					<EditListContainer onSelected={this.handleClose} />
 				</BottomSheets>
 				<AddGoalContainer />
+				<SelectMapContainer />
 			</div>
 		);
 	}

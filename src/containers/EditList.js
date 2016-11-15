@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import EditList from '../components/EditList'
-import { showAddGoal } from '../actions'
+import { showAddGoal, showSelectMap } from '../actions'
 
 const mapStateToProps = (state) => {
 	return {}
@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		showAddGoal: () => dispatch(showAddGoal())
+		showAddGoal: () => dispatch(showAddGoal()),
+		showSelectMap: () => dispatch(showSelectMap()),
 	}
 }
 
