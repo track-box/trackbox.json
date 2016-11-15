@@ -54,3 +54,15 @@ export const hideLink = () => ({
 	type: 'HIDE_LINK'
 })
 
+export const showSave = () => ({
+	type: 'SHOW_SAVE'
+})
+
+export const hideSave = () => ({
+	type: 'HIDE_SAVE'
+})
+
+export const doneSave = () => ({
+	type: 'DONE_SAVE'
+})
+

@@ -6,6 +6,7 @@ import AddGoalContainer from '../containers/AddGoal'
 import SelectMapContainer from '../containers/SelectMap'
 import RenameContainer from '../containers/Rename'
 import LinkContainer from '../containers/Link'
+import SaveContainer from '../containers/Save'
 
 const styles = {
 	content: {
@@ -44,6 +45,7 @@ export default class Edit extends React.Component {
 				<SelectMapContainer />
 				<RenameContainer />
 				<LinkContainer />
+				<SaveContainer />
 			</div>
 		);
 	}
