@@ -50,7 +50,7 @@ export default class AddGoal extends React.Component {
 					onChange={this.handleChange}
 					hintText="302 or 16008000"
 					floatingLabelText="Goal number or Digit"
-					keyboardFocused={true}
+					type={"tel"}
 					style={{
 						width: "100%",
 						margin: "auto"
