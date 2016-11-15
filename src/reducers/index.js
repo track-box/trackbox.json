@@ -5,6 +5,7 @@ import trackGoal from './TrackGoal'
 import addGoal from './AddGoal'
 import selectMap from './SelectMap'
 import rename from './Rename'
+import link from './Link'
 
 const reducer = combineReducers({
 	trackDataSummary,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
 	addGoal,
 	selectMap,
 	rename,
+	link,
 })
 
 export default reducer

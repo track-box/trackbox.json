@@ -38,9 +38,16 @@ const EditList = (props) => (
 			<ListItem primaryText="Save" innerDivStyle={styles.item} leftIcon={
 				<FontIcon className="material-icons">save</FontIcon>
 			} />
-			<ListItem primaryText="Link" innerDivStyle={styles.item} leftIcon={
-				<FontIcon className="material-icons">link</FontIcon>
-			} />
+			<ListItem primaryText="Link"
+				innerDivStyle={styles.item}
+				leftIcon={
+					<FontIcon className="material-icons">link</FontIcon>
+				}
+				onTouchTap={() => {
+					props.showLink()
+					props.onSelected()
+				}}
+			/>
 		</List>
 		<Divider />
 		<List>

@@ -6,6 +6,7 @@
 /** @constructor */
 function TrackboxTrack(url, div_id) {
 	this._url = url;
+	this._host = "http://track.box"
 
 	var self = this;
 	this._loadJSON(url, function (data){
@@ -145,7 +146,9 @@ TrackboxTrack.prototype._setTrackData = function (){
 		avgSpeed: Math.round(this.summary.avg_speed * 10) / 10, // 0.0 m/s
 		maxSpeed: Math.round(this.summary.max_speed * 10) / 10, // 0.0 m/s
 		minAltitude: Math.round(this.summary.min_alt), // 0 m
-		maxAltitude: Math.round(this.summary.max_alt) // 0 m
+		maxAltitude: Math.round(this.summary.max_alt), // 0 m
+		publicLink: this._host + '/track/' + this.data.track_id,
+		editLink: this._host + '/edit/' + this._edit_id
 	};
 
 	window.trackboxReact.setTrackData(trackData);

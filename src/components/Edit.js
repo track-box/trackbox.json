@@ -5,6 +5,7 @@ import EditListContainer from '../containers/EditList';
 import AddGoalContainer from '../containers/AddGoal'
 import SelectMapContainer from '../containers/SelectMap'
 import RenameContainer from '../containers/Rename'
+import LinkContainer from '../containers/Link'
 
 const styles = {
 	content: {
@@ -42,6 +43,7 @@ export default class Edit extends React.Component {
 				<AddGoalContainer />
 				<SelectMapContainer />
 				<RenameContainer />
+				<LinkContainer />
 			</div>
 		);
 	}

@@ -46,3 +46,11 @@ export const hideRename = () => ({
 	type: 'HIDE_RENAME'
 })
 
+export const showLink = () => ({
+	type: 'SHOW_LINK'
+})
+
+export const hideLink = () => ({
+	type: 'HIDE_LINK'
+})
+

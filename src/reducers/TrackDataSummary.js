@@ -7,7 +7,9 @@ const defaultData = {
 	avgSpeed: "-",
 	maxSpeed: "-",
 	minAltitude: "-",
-	maxAltitude: "-"
+	maxAltitude: "-",
+	publicLink: "",
+	editLink: ""
 }
 
 function trackDataSummary(state = defaultData, action) {
