@@ -18,6 +18,7 @@ function TrackboxTrack(url, div_id) {
 		self._init(data);
 		self._initGoals(data.goals);
 
+		if (data.map) window.trackboxReact.setMapName(data.map.name);
 		trackboxMap.setTitle(data.name);
 	});
 }
