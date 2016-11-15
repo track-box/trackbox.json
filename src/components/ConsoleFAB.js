@@ -21,7 +21,7 @@ const ConsoleFAB = (props) => {
 	}
 
 	return (
-		<FloatingActionButton style={style} mini={true} backgroundColor={blue50} {...props}>
+		<FloatingActionButton style={style} mini={props.mini} backgroundColor={blue50} {...props}>
 			<FontIcon className="material-icons" style={iconStyle}>assessment</FontIcon>
 		</FloatingActionButton>
 	)

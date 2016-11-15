@@ -32,7 +32,7 @@ const App = () => (
 	<MuiThemeProvider muiTheme={muiTheme}>
 		<div>
 			<TrackboxFAB />
-			<Console />
+			<Console mini={true}/>
 			<TrackGoalContainer />
 		</div>
 	</MuiThemeProvider>
