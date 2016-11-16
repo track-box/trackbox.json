@@ -28,7 +28,7 @@ TrackboxGoals.prototype.setMapDef = function(map_def, callback) {
 
 	var self = this;
 	this._loadJSON(map_def.waypoint_url, function (data) {
-		self._waypoint = data.waypoints;
+		self._waypoints = data.waypoints;
 		if (callback) callback();
 	});
 
@@ -58,16 +58,19 @@ TrackboxGoals.prototype.addGoal = function(x) {
 	}
 
 	if (x.length == 3){
-		if (this._waypoint.data.waypoints[x]){
-			var w = this._waypoint.data.waypoints[x];
-			this._addPoint(x, w.lat, w.lon, { number: x });
+		if (this._waypoints[x]){
+			var w = this._waypoints[x];
+			this._addGoal(x, w.lat, w.lon, { number: x });
+			this._showGoal(x);
 
 		}else{
 			window.trackboxReact.showSnackbar("not found");
 		}
 	}else if (x.length == 8){
 		var latlon = this._getDigitLatLon(x);
-		this._addPoint(x, latlon.lat, latlon.lon, { coord: x });
+		var num = Object.keys(this._goals).length + "";
+		this._addGoal(num, latlon.lat, latlon.lon, { coord: x });
+		this._showGoal(num);
 
 	}else{
 		window.trackboxReact.showSnackbar("error!");
@@ -122,9 +125,11 @@ TrackboxGoals.prototype._addGoal = function(name, lat, lon, goal_data) {
 
 
 
-TrackboxGoals.prototype._showGoal = function(pos) {
-	this.map.setZoom(14);
-	this.map.panTo(pos);
+TrackboxGoals.prototype._showGoal = function(name) {
+	if (this._goals[name]){
+		this.map.setZoom(14);
+		this.map.panTo(this._goals[name].pos);
+	}
 };
 
 

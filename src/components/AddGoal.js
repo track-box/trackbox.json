@@ -15,7 +15,7 @@ export default class AddGoal extends React.Component {
 	}
 
 	handleSubmit = () => {
-		console.log(this.state.value)
+		window.track.addGoal(this.state.value)
 		this.props.onClose()
 
 		this.setState({
