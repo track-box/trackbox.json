@@ -15,7 +15,7 @@ export default class Rename extends React.Component {
 	}
 
 	handleSubmit = () => {
-		window.track.trackboxMap.setTitle(this.state.value)
+		window.track.setTitle(this.state.value)
 		this.props.onNameChange(this.state.value)
 		this.props.onClose()
 	}

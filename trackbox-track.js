@@ -22,7 +22,7 @@ function TrackboxTrack(url, div_id) {
 		self._initGoals(data.goals);
 
 		if (data.map) window.trackboxReact.setMapName(data.map.name);
-		trackboxMap.setTitle(data.name);
+		self.setTitle(data.name);
 		
 		window.trackboxReact.hideLoading();
 	});
@@ -39,6 +39,11 @@ TrackboxTrack.prototype._loadJSON = function(url, callback) {
 	xhr.send(null);
 };
 
+
+TrackboxTrack.prototype.setTitle = function(name) {
+	this.data.name = name;
+	this.trackboxMap.setTitle(name);
+};
 
 
 TrackboxTrack.prototype._init = function(json) {
