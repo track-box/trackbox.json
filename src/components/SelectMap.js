@@ -5,7 +5,7 @@ import MenuItem from 'material-ui/MenuItem';
 
 export default class SelectMap extends React.Component {
 	handleChange = (event, index, value) => {
-		console.log(value)
+		window.track.setMap(value)
 
 		this.props.onMapChange(value)
 		this.props.onClose()

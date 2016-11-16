@@ -67,6 +67,21 @@ TrackboxTrack.prototype.addGoal = function(x) {
 	this.goals.addGoal(x);
 };
 
+TrackboxTrack.prototype.setMap = function(map_name) {
+	window.trackboxReact.showLoading();
+
+	var self = this;
+	var url = "https://track-box.github.io/trackbox-map/json/" + map_name.toLowerCase() + ".json";
+	this._loadJSON(url, function(json){
+		self.data.map = json;
+
+		self.trackboxMap.setMapDef(json);
+		self.goals.setMapDef(json, function(){
+			window.trackboxReact.hideLoading();
+		});
+	});
+};
+
 /** @private */
 TrackboxTrack.prototype._init = function(json) {
 	this._initTrackData(json);
