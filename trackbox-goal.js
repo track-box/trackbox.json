@@ -19,22 +19,30 @@ function TrackboxGoal(name, pos, goal, map) {
 TrackboxGoal.prototype.onAdd = function() {
 	this._div = document.createElement('div');
 
-	if (this._name.length > 5) console.log("TODO");
+	var show_name = this._name;
+	var width = 8 * this._name.length;
+
+	if (this._name.length == 1) width = 12;
+	if (this._name.length > 6) {
+		width = 48;
+		show_name = this._name.substr(0, 6);
+	}
 
 	this._div.style.position = 'absolute';
-	this._div.style.width = '40px';
+	this._div.style.width = width + 'px';
 	this._div.style.height = '32px';
 
 	this._div.innerHTML = 
-		'<div style="width: 40px; font-size:12px; text-align:center; line-height:1; background-color: #f06292; color: #212121; padding: 1px; border: 1px solid #777; box-shadow: 0 1px 4px -1px rgba(0,0,0,.3)">' + this._name + '</div>' +
-	'<svg width="40" height="14">' +
-		'<line x1="20" y1="0" x2="20" y2="8" stroke="#111" stroke-width="1" />' +
-		'<circle cx="20" cy="10" r="3" stroke="#e91e63" stroke-width="2" fill="none" />' +
+		'<div style="width: ' + width + 'px; font-size:12px; text-align:center; line-height:1; background-color: #f06292; color: #212121; padding: 1px; border: 1px solid #777; box-shadow: 0 1px 4px -1px rgba(0,0,0,.3)">' + show_name + '</div>' +
+	'<svg width="' + width + '" height="14">' +
+		'<line x1="' + width/2 + '" y1="0" x2="' + width/2 + '" y2="8" stroke="#111" stroke-width="1" />' +
+		'<circle cx="' + width/2 + '" cy="10" r="3" stroke="#e91e63" stroke-width="2" fill="none" />' +
 		'</svg>';
 
 	var name = this._name;
 	var sub = (this._data.number) ? this._data.number : 
 				(this._data.coord) ? this._data.coord : '';
+	this._width = width;
 
 	this._div.onclick = function (e) {
 		e.preventDefault();
@@ -48,7 +56,7 @@ TrackboxGoal.prototype.onAdd = function() {
 
 TrackboxGoal.prototype.draw = function() {
 	var pos = this._getPosFromLatLng(this._pos);
-	this._div.style.left = (pos.x - 20) + 'px';
+	this._div.style.left = (pos.x - this._width/2) + 'px';
 	this._div.style.top = (pos.y - 28) + 'px';
 };
 
