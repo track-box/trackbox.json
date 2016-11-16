@@ -5,7 +5,7 @@ import { createStore } from 'redux'
 import reducer from './reducers'
 import AppEdit from './appEdit'
 
-import { setTrackData, setTrackGraph, showTrackGoal, mapChanged, showLoading, hideLoading, showSnackbar } from './actions'
+import { setTrackData, setTrackGraph, showTrackGoalEdit, mapChanged, showLoading, hideLoading, showSnackbar } from './actions'
 
 let store = createStore(reducer)
 
@@ -25,7 +25,7 @@ window.trackboxReact = {
 		store.dispatch(setTrackGraph(data))
 	},
 	showTrackGoal: function (goal) {
-		store.dispatch(showTrackGoal(goal))
+		store.dispatch(showTrackGoalEdit(goal))
 	},
 	setMapName: function (map) {
 		store.dispatch(mapChanged(map))

@@ -15,7 +15,7 @@ injectTapEventPlugin();
 import TrackboxFAB from './components/TrackboxFAB';
 import Console from './components/Console';
 import Edit from './components/Edit';
-import TrackGoalContainer from './containers/TrackGoal';
+import TrackGoalEditContainer from './containers/TrackGoalEdit';
 import LoadingContainer from './containers/Loading';
 import SnackbarContainer from './containers/Snackbar';
 
@@ -37,7 +37,7 @@ const EditApp = () => (
 			<TrackboxFAB />
 			<Console mini={false}/>
 			<Edit />
-			<TrackGoalContainer />
+			<TrackGoalEditContainer />
 			<LoadingContainer />
 			<SnackbarContainer />
 		</div>

@@ -82,3 +82,16 @@ export const showSnackbar = (message) => ({
 export const hideSnackbar = () => ({
 	type: 'HIDE_SNACKBAR'
 })
+
+export const showTrackGoalEdit = (goal) => ({
+	type: 'SHOW_TRACK_GOAL_EDIT',
+	goal: goal
+})
+
+export const hideTrackGoalEdit = () => ({
+	type: 'HIDE_TRACK_GOAL_EDIT'
+})
+
+export const editTrackGoalEdit = () => ({
+	type: 'EDIT_TRACK_GOAL_EDIT'
+})
