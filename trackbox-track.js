@@ -7,6 +7,8 @@
 function TrackboxTrack(url, div_id) {
 	this._url = url;
 	this._host = "http://track.box"
+	
+	window.trackboxReact.showLoading();
 
 	var self = this;
 	this._loadJSON(url, function (data){
@@ -21,6 +23,8 @@ function TrackboxTrack(url, div_id) {
 
 		if (data.map) window.trackboxReact.setMapName(data.map.name);
 		trackboxMap.setTitle(data.name);
+		
+		window.trackboxReact.hideLoading();
 	});
 }
 
