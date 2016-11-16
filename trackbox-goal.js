@@ -39,14 +39,14 @@ TrackboxGoal.prototype.onAdd = function() {
 		'<circle cx="' + width/2 + '" cy="10" r="3" stroke="#e91e63" stroke-width="2" fill="none" />' +
 		'</svg>';
 
+	var self = this;
 	var name = this._name;
-	var sub = (this._data.number) ? this._data.number : 
-				(this._data.coord) ? this._data.coord : '';
+	var sub = (this._data.coord) ? this._data.coord : '';
 	this._width = width;
 
 	this._div.onclick = function (e) {
 		e.preventDefault();
-		window.trackboxReact.showTrackGoal({ name: name, sub: sub });
+		window.trackboxReact.showTrackGoal({ name: name, sub: sub, data: self });
 		return false;
 	};
 

@@ -116,11 +116,9 @@ TrackboxGoals.prototype._addGoal = function(name, lat, lon, goal_data) {
 
 	this._goals[name] = {
 		pos: pos,
-		marker: marker
+		marker: marker,
+		data: goal_data
 	};
-
-	if (goal_data.number) this._goals[name].number = goal_data.number;
-	if (goal_data.coord) this._goals[name].coord = goal_data.coord;
 };
 
 
