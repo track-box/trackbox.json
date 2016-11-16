@@ -66,3 +66,11 @@ export const doneSave = () => ({
 	type: 'DONE_SAVE'
 })
 
+export const showLoading = () => ({
+	type: 'SHOW_LOADING'
+})
+
+export const hideLoading = () => ({
+	type: 'HIDE_LOADING'
+})
+

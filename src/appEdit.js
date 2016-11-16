@@ -16,6 +16,7 @@ import TrackboxFAB from './components/TrackboxFAB';
 import Console from './components/Console';
 import Edit from './components/Edit';
 import TrackGoalContainer from './containers/TrackGoal';
+import LoadingContainer from './containers/Loading';
 
 const muiTheme = getMuiTheme({
 	tabs: {
@@ -36,6 +37,7 @@ const EditApp = () => (
 			<Console mini={false}/>
 			<Edit />
 			<TrackGoalContainer />
+			<LoadingContainer />
 		</div>
 	</MuiThemeProvider>
 );
