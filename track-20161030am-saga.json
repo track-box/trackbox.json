@@ -14,7 +14,8 @@
 			"ymin": 3660873,
 			"ymax": 3697218
 		},
-		"url": "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016"
+		"url": "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016",
+		"waypoint_url": "https://track-box.github.io/trackbox-map/saga2016/waypoint.json"
 	},
 	"last_update": 1477785604,
 	"goals": {
