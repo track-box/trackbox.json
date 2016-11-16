@@ -17,6 +17,7 @@ import Console from './components/Console';
 import Edit from './components/Edit';
 import TrackGoalContainer from './containers/TrackGoal';
 import LoadingContainer from './containers/Loading';
+import SnackbarContainer from './containers/Snackbar';
 
 const muiTheme = getMuiTheme({
 	tabs: {
@@ -38,6 +39,7 @@ const EditApp = () => (
 			<Edit />
 			<TrackGoalContainer />
 			<LoadingContainer />
+			<SnackbarContainer />
 		</div>
 	</MuiThemeProvider>
 );

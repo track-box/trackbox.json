@@ -74,3 +74,11 @@ export const hideLoading = () => ({
 	type: 'HIDE_LOADING'
 })
 
+export const showSnackbar = (message) => ({
+	type: 'SHOW_SNACKBAR',
+	message: message
+})
+
+export const hideSnackbar = () => ({
+	type: 'HIDE_SNACKBAR'
+})

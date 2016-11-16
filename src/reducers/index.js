@@ -8,6 +8,7 @@ import rename from './Rename'
 import link from './Link'
 import save from './Save'
 import loading from './Loading'
+import snackbar from './Snackbar'
 
 const reducer = combineReducers({
 	trackDataSummary,
@@ -18,7 +19,8 @@ const reducer = combineReducers({
 	rename,
 	link,
 	save,
-	loading
+	loading,
+	snackbar,
 })
 
 export default reducer
