@@ -40,13 +40,12 @@ TrackboxGoal.prototype.onAdd = function() {
 		'</svg>';
 
 	var self = this;
-	var name = this._name;
 	var sub = (this._data.coord) ? this._data.coord : '';
 	this._width = width;
 
 	this._div.onclick = function (e) {
 		e.preventDefault();
-		window.trackboxReact.showTrackGoal({ name: name, sub: sub, data: self });
+		window.trackboxReact.showTrackGoal({ name: self._name, sub: sub, data: self._data });
 		return false;
 	};
 

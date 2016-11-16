@@ -5,9 +5,19 @@ import FontIcon from 'material-ui/FontIcon';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import {List, ListItem} from 'material-ui/List';
-import { Circle } from 'react-color';
+import { CirclePicker } from 'react-color';
 
 export default class TrackGoalEdit extends React.Component {
+
+	colors = [
+		"#F06292", // pink300
+		"#64B5F6", // blue300
+		"#AED581", // lightgreen300
+		"#FFB74D", // orange300
+		"#BA68C8", // purple300
+		"#7986CB", // indigo300
+	]
+
 	render() {
 		let { show, editing, goal, onClose, onEdit } = this.props
 	
@@ -58,13 +68,15 @@ export default class TrackGoalEdit extends React.Component {
 									>
 										<TextField
 											id="coord"
-											value={goal.name}
+											value={goal.data.coord}
 											onChange={this.handleChange}
 										/>
 									</ListItem>
 									<ListItem
 										leftIcon={<FontIcon className="material-icons">color_lens</FontIcon>}
+										innerDivStyle={{ paddingTop: 8, paddingBottom: 6 }}
 									>
+										<CirclePicker colors={this.colors} />
 									</ListItem>
 								</List>
 								<Divider />
