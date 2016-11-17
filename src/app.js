@@ -15,6 +15,7 @@ injectTapEventPlugin();
 import TrackboxFAB from './components/TrackboxFAB';
 import Console from './components/Console';
 import TrackGoalContainer from './containers/TrackGoal';
+import LoadingContainer from './containers/Loading';
 
 const muiTheme = getMuiTheme({
 	tabs: {
@@ -34,6 +35,7 @@ const App = () => (
 			<TrackboxFAB />
 			<Console mini={true}/>
 			<TrackGoalContainer />
+			<LoadingContainer />
 		</div>
 	</MuiThemeProvider>
 );

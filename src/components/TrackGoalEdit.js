@@ -48,7 +48,10 @@ export default class TrackGoalEdit extends React.Component {
 						</span>
 						<RaisedButton
 							primary={true}
-							onTouchTap={onEdit}
+							onTouchTap={() => {
+								onEdit()
+								goal.goal.setCenter()
+							}}
 							icon={<FontIcon className="material-icons">edit</FontIcon>}
 							style={{
 								position: "absolute",
@@ -112,6 +115,10 @@ export default class TrackGoalEdit extends React.Component {
 									<ListItem
 										primaryText="Delete"
 										leftIcon={<FontIcon className="material-icons">delete</FontIcon>}
+										onTouchTap={() => {
+											goal.goal.delete()
+											onClose()
+										}}
 									>
 									</ListItem>
 								</List>

@@ -26,15 +26,19 @@ function TrackboxGoals(map, goals) {
 TrackboxGoals.prototype.setMapDef = function(map_def, callback) {
 	this._map_def = map_def;
 
-	var self = this;
-	this._loadJSON(map_def.waypoint_url, function (data) {
-		self._waypoints = data.waypoints;
-		if (callback) callback();
-	});
+	if (map_def.waypoint_url){
+		var self = this;
+		this._loadJSON(map_def.waypoint_url, function (data) {
+			self._waypoints = data.waypoints;
+			if (callback) callback();
+		});
+	}
 
 	this._utm = map_def.utm;
-	this._utm.xbase = Math.floor(this._utm.xmax / 100000) * 100000;
-	this._utm.ybase = Math.floor(this._utm.ymax / 100000) * 100000;
+	if (this._utm){
+		this._utm.xbase = Math.floor(this._utm.xmax / 100000) * 100000;
+		this._utm.ybase = Math.floor(this._utm.ymax / 100000) * 100000;
+	}
 };
 
 
