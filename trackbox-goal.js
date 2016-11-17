@@ -93,7 +93,8 @@ TrackboxGoal.prototype.setName = function(name) {
 
 TrackboxGoal.prototype.setCenter = function() {
 	this.map.setZoom(14);
-	this.map.panTo(this._pos);
+	var pos = new google.maps.LatLng(this._pos.lat() - 0.007, this._pos.lng());
+	this.map.panTo(pos);
 };
 
 TrackboxGoal.prototype.delete = function() {
