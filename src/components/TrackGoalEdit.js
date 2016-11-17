@@ -29,9 +29,9 @@ export default class TrackGoalEdit extends React.Component {
 				open={show}
 				onRequestClose={() => onClose()}
 				bodyStyle={{ padding: 0 }}
-			>
-				<div>
-					<div style={{ padding: 24 }}>
+				autoScrollBodyContent={true}
+				title={
+					<div style={{ padding: 24, position: "relative" }}>
 						{goal.name}
 						<span style={{ marginLeft:"24px", fontSize:"12px" }}>
 							{goal.sub}
@@ -47,6 +47,15 @@ export default class TrackGoalEdit extends React.Component {
 							}}
 						/>
 					</div>
+				}
+				titleStyle={{
+					padding: 0,
+					fontWewght:"normal",
+					fontSize:"inherit",
+					lineHeight:"inherit"
+				}}
+			>
+				<div style={{ height: (editing) ? 154 : 0 }}>
 					{(() => {
 						if (editing){
 							return (
