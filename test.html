@@ -6,14 +6,14 @@
 	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<style>
-		html, body{
+	/*	html, body{
 			position:fixed;
 			top:0;
 			left:0;
 			right:0;
 			bottom:0;
 		}
-
+*/
 		body { margin:0; padding:0; }
 		#map { position:absolute; top:0; bottom:0; width:100%; }
 	</style>
@@ -32,18 +32,6 @@
 	<script src="bundle.js"></script>
 
 	<script>
-		alert(window.innerHeight);
-		window.addEventListener("resize", function(){
-			onResize();
-		});
-
-		function onResize(){
-			alert(window.innerHeight);
-			document.querySelector("body").style.height = window.innerHeight + "px"
-		};
-
-		onResize();
-
 		var track = new TrackboxTrack("track-20161030am-saga.json", "map");
 	</script>
 
