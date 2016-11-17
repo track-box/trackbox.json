@@ -266,6 +266,7 @@ TrackboxTrack.prototype.showInfoWindowFromLatLng = function (lat, lng){
 
 
 TrackboxTrack.prototype.showInfoWindow = function (t){
+	if (this._preventInfoWindow) return;
 	if (this._infoWindow) this._infoWindow.close();
 
 	function pad(n) { return n<10 ? '0'+n : n; }
@@ -285,6 +286,15 @@ TrackboxTrack.prototype.showInfoWindow = function (t){
 	this._infoWindow.open(this.map);
 };
 
+TrackboxTrack.prototype.closeInfoWindow = function (){
+	if (this._infoWindow) this._infoWindow.close();
+};
+
+TrackboxTrack.prototype.preventInfoWindow = function (){
+	this._preventInfoWindow = true;
+	var self = this;
+	setTimeout(function(){ self._preventInfoWindow = false; }, 200);
+};
 
 TrackboxTrack.prototype._gradient = function(x) {
 	var grad = [

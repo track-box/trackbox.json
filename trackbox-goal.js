@@ -47,10 +47,9 @@ TrackboxGoal.prototype.onAdd = function() {
 	var sub = (this.data.coord) ? this.data.coord : '';
 	this._width = width;
 
-	this._div.onclick = function (e) {
-		e.preventDefault();
+	this._div.onclick = function () {
+		window.track.preventInfoWindow();
 		window.trackboxReact.showTrackGoal({ name: self._name, sub: sub, data: self.data, goal: self });
-		return false;
 	};
 
 	var panes = this.getPanes();
