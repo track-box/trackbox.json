@@ -30,11 +30,13 @@
 	<script src="bundle.js"></script>
 
 	<script>
+		alert(window.innerHeight);
 		window.addEventListener("resize", function(){
 			onResize();
 		});
 
 		function onResize(){
+			alert(window.innerHeight);
 			document.querySelector("body").style.height = window.innerHeight + "px"
 		};
 
