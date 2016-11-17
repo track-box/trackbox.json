@@ -112,6 +112,10 @@ export default class TrackGoalEdit extends React.Component {
 									<ListItem
 										primaryText="Delete"
 										leftIcon={<FontIcon className="material-icons">delete</FontIcon>}
+										onTouchTap={() => {
+											goal.goal.delete()
+											onClose()
+										}}
 									>
 									</ListItem>
 								</List>

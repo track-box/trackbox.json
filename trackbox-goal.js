@@ -90,3 +90,8 @@ TrackboxGoal.prototype.setName = function(name) {
 	this._name = name;
 	this._redraw();
 };
+
+TrackboxGoal.prototype.delete = function() {
+	this.setMap(null);
+	this.data = null;
+};
