@@ -37,23 +37,8 @@ function TrackboxTrack(url, div_id, options) {
 		window.trackboxReact.hideLoading();
 	});
 		
-	if (/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase()) && 
-		/twitter|fbav|line/.test(navigator.userAgent.toLowerCase())){
-		this._fitHeight();
-	}
 }
 
-TrackboxTrack.prototype._fitHeight = function() {
-	function onResize(){
-		document.querySelector("body").style.height = window.innerHeight + "px"
-	};
-
-	window.addEventListener("resize", function(){
-		onResize();
-	});
-
-	onResize();
-};
 
 TrackboxTrack.prototype._loadJSON = function(url, callback) {
 	var xhr = new XMLHttpRequest();
