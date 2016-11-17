@@ -29,7 +29,10 @@ export default class Console extends React.Component {
 	render() {
 		return (
 			<div>
-				<ConsoleFAB onTouchTap={this.handleOpen} />
+				<ConsoleFAB 
+					onTouchTap={this.handleOpen}
+					mini={this.props.mini}	
+				/>
 				<BottomSheetsWithCloseButton
 					bodyStyle={styles.content}
 					modal={false}

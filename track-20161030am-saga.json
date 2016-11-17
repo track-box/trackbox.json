@@ -13,34 +13,40 @@
 			"ymin": 3660873,
 			"ymax": 3697218
 		},
-		"url": "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016"
+		"url": "https://d128cdxvkxdfwx.cloudfront.net/map/saga2016",
+		"waypoint_url": "https://track-box.github.io/trackbox-map/saga2016/waypoint.json"
 	},
 	"last_update": 1477785604,
 	"goals": {
 		"03PDG": {
 			"lat": 33.24385427343142,
 			"lon": 130.23226589431107,
-			"number": "220"
+			"coord": "220",
+			"color": "#64B5F6"
 		},
 		"04JDG": {
 			"lat": 33.22853753559259,
 			"lon": 130.2141399998455,
-			"coord": "13137728"
+			"coord": "13137728",
+			"color": "#64B5F6"
 		},
 		"05JDG": {
 			"lat": 33.216630013053276,
 			"lon": 130.19573421427424,
-			"coord": "11437594"
+			"coord": "11437594",
+			"color": "#64B5F6"
 		},
 		"06JDG": {
 			"lat": 33.19205994224866,
 			"lon": 130.16160947471306,
-			"coord": "08287318"
+			"coord": "08287318",
+			"color": "#64B5F6"
 		},
 		"07FON": {
 			"lat": 33.18417594158814,
 			"lon": 130.15494092371713,
-			"number": "309"
+			"coord": "309",
+			"color": "#64B5F6"
 		}
 	},
     "track":[

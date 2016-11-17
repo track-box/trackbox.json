@@ -15,13 +15,14 @@ const iconStyle = {
 };
 
 const ConsoleFAB = (props) => {
-	if (/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase()) && 
+	if (props.mini &&
+		/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase()) && 
 		/twitter|fbav|line/.test(navigator.userAgent.toLowerCase())){
 		style.bottom = 100
 	}
 
 	return (
-		<FloatingActionButton style={style} mini={true} backgroundColor={blue50} {...props}>
+		<FloatingActionButton style={style} mini={props.mini} backgroundColor={blue50} {...props}>
 			<FontIcon className="material-icons" style={iconStyle}>assessment</FontIcon>
 		</FloatingActionButton>
 	)

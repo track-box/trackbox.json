@@ -14,7 +14,11 @@ injectTapEventPlugin();
 // my component
 import TrackboxFAB from './components/TrackboxFAB';
 import Console from './components/Console';
-import TrackGoalContainer from './containers/TrackGoal';
+import Edit from './components/Edit';
+import TrackGoalEditContainer from './containers/TrackGoalEdit';
+import TrackGoalAddContainer from './containers/TrackGoalAdd';
+import LoadingContainer from './containers/Loading';
+import SnackbarContainer from './containers/Snackbar';
 
 const muiTheme = getMuiTheme({
 	tabs: {
@@ -28,14 +32,18 @@ const muiTheme = getMuiTheme({
 });
 
 
-const App = () => (
+const EditApp = () => (
 	<MuiThemeProvider muiTheme={muiTheme}>
 		<div>
 			<TrackboxFAB />
-			<Console mini={true}/>
-			<TrackGoalContainer />
+			<Console mini={false}/>
+			<Edit />
+			<TrackGoalEditContainer />
+			<TrackGoalAddContainer />
+			<LoadingContainer />
+			<SnackbarContainer />
 		</div>
 	</MuiThemeProvider>
 );
 
-export default App;
+export default EditApp;

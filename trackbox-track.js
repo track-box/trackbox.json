@@ -6,6 +6,9 @@
 /** @constructor */
 function TrackboxTrack(url, div_id) {
 	this._url = url;
+	this._host = "http://track.box"
+	
+	window.trackboxReact.showLoading();
 
 	var self = this;
 	this._loadJSON(url, function (data){
@@ -16,9 +19,19 @@ function TrackboxTrack(url, div_id) {
 		self.map = trackboxMap.map;
 
 		self._init(data);
-		self._initGoals(data.goals);
+		self.setTitle(data.name);
+		
+		self.goals = new TrackboxGoals(self.map, data.goals);
+		self.longtouch = new TrackboxLongTouch(self.map, self.goals, div_id, function (goal){
+			window.trackboxReact.showTrackGoalAdd(goal);
+		});
 
-		trackboxMap.setTitle(data.name);
+		if (data.map){
+			window.trackboxReact.setMapName(data.map.name);
+			self.goals.setMapDef(data.map);
+		}
+		
+		window.trackboxReact.hideLoading();
 	});
 }
 
@@ -34,8 +47,68 @@ TrackboxTrack.prototype._loadJSON = function(url, callback) {
 };
 
 
+/** @public for UI */
+TrackboxTrack.prototype.setTitle = function(name) {
+	this.data.name = name;
+	this.trackboxMap.setTitle(name);
+};
 
+TrackboxTrack.prototype.showMarker = function (t){
+	if (!this._marker) {
+		this._marker = new google.maps.Marker();
+	}
+
+	this._marker.setPosition(this.track[t].pos);
+	this._marker.setMap(this.map);
+};
+
+TrackboxTrack.prototype.hideMarker = function (){
+	if (this._marker) this._marker.setMap(null);
+};
+
+TrackboxTrack.prototype.addGoal = function(x) {
+	this.goals.addGoal(x);
+};
+
+TrackboxTrack.prototype.addPoint = function(x) {
+	this.goals.addPoint(x);
+};
+
+TrackboxTrack.prototype.setMap = function(map_name) {
+	window.trackboxReact.showLoading();
+
+	var self = this;
+	var url = "https://track-box.github.io/trackbox-map/json/" + map_name.toLowerCase() + ".json";
+	this._loadJSON(url, function(json){
+		self.data.map = json;
+
+		self.trackboxMap.setMapDef(json);
+		self.goals.setMapDef(json, function(){
+			window.trackboxReact.hideLoading();
+		});
+	});
+};
+
+/** @private */
 TrackboxTrack.prototype._init = function(json) {
+	this._initTrackData(json);
+	this._calculateDistances();
+	this._calculateSummary();
+
+	this.map.fitBounds({
+		east: this.summary.max_lng,
+		west: this.summary.min_lng,
+		north: this.summary.max_lat,
+		south: this.summary.min_lat
+	});
+
+	this._drawPath();
+
+	this._setTrackData();
+	this._setTrackGraph();
+};
+
+TrackboxTrack.prototype._initTrackData = function(json) {
 	this.track = [];
 	var min_lat = json.track[0][0];
 	var max_lat = json.track[0][0];
@@ -65,7 +138,19 @@ TrackboxTrack.prototype._init = function(json) {
 			time: trkp[3] * 1000
 		});
 	}
+	
+	this.summary = {
+		min_lat: min_lat,
+		max_lat: max_lat,
+		min_lng: min_lng,
+		max_lng: max_lng,
+		min_alt: min_alt,
+		max_alt: max_alt
+	};
+};
 
+
+TrackboxTrack.prototype._calculateDistances = function() {
 	// calculate speed and distance
 	var track_distance = 0;
 	var speed_1 = 0, speed_2 = 0;
@@ -93,38 +178,23 @@ TrackboxTrack.prototype._init = function(json) {
 		this.track[i].heading = heading;
 	}
 
+	this.summary.max_speed = max_speed;
+	this.summary.track_distance = track_distance;
+}
+
+
+TrackboxTrack.prototype._calculateSummary = function() {
 	// summary
 	var last = this.track.length - 1;
 	var distance = google.maps.geometry.spherical.computeDistanceBetween(this.track[0].pos, this.track[last].pos);
 	var time = this.track[last].time - this.track[0].time;
-	var avg_speed = track_distance / time * 1000;
+	var avg_speed = this.summary.track_distance / time * 1000;
 
-	this.summary = {
-		min_lat: min_lat,
-		max_lat: max_lat,
-		min_lng: min_lng,
-		max_lng: max_lng,
-		min_alt: min_alt,
-		max_alt: max_alt,
-		max_speed: max_speed,
-		avg_speed: avg_speed,
-		track_distance: track_distance,
-		distance: distance,
-		time: time
-	};
-
-	this.map.fitBounds({
-		east: max_lng,
-		west: min_lng,
-		north: max_lat,
-		south: min_lat
-	});
-
-	this._drawPath();
-
-	this._setTrackData();
-	this._setTrackGraph();
+	this.summary.distance = distance;
+	this.summary.avg_speed = avg_speed;
+	this.summary.time = time;
 };
+
 			
 TrackboxTrack.prototype._setTrackData = function (){
 	function pad(n) { return n<10 ? '0'+n : n; }
@@ -144,7 +214,9 @@ TrackboxTrack.prototype._setTrackData = function (){
 		avgSpeed: Math.round(this.summary.avg_speed * 10) / 10, // 0.0 m/s
 		maxSpeed: Math.round(this.summary.max_speed * 10) / 10, // 0.0 m/s
 		minAltitude: Math.round(this.summary.min_alt), // 0 m
-		maxAltitude: Math.round(this.summary.max_alt) // 0 m
+		maxAltitude: Math.round(this.summary.max_alt), // 0 m
+		publicLink: this._host + '/track/' + this.data.track_id,
+		editLink: this._host + '/edit/' + this._edit_id
 	};
 
 	window.trackboxReact.setTrackData(trackData);
@@ -193,7 +265,7 @@ TrackboxTrack.prototype.showInfoWindowFromLatLng = function (lat, lng){
 	for (var i = 0; i < this.track.length; i++){
 		var d = Math.pow(this.track[i].lat - lat, 2) + Math.pow(this.track[i].lng - lng, 2);
 		dis.push({ i: i, d: d });
-	};
+	}	
 
 	dis.sort(function (a, b) { return a.d - b.d });
 	this.showInfoWindow(dis[0].i);
@@ -201,6 +273,7 @@ TrackboxTrack.prototype.showInfoWindowFromLatLng = function (lat, lng){
 
 
 TrackboxTrack.prototype.showInfoWindow = function (t){
+	if (this._preventInfoWindow) return;
 	if (this._infoWindow) this._infoWindow.close();
 
 	function pad(n) { return n<10 ? '0'+n : n; }
@@ -220,17 +293,14 @@ TrackboxTrack.prototype.showInfoWindow = function (t){
 	this._infoWindow.open(this.map);
 };
 
-TrackboxTrack.prototype.showMarker = function (t){
-	if (!this._marker) {
-		this._marker = new google.maps.Marker();
-	}
-
-	this._marker.setPosition(this.track[t].pos);
-	this._marker.setMap(this.map);
+TrackboxTrack.prototype.closeInfoWindow = function (){
+	if (this._infoWindow) this._infoWindow.close();
 };
 
-TrackboxTrack.prototype.hideMarker = function (){
-	if (this._marker) this._marker.setMap(null);
+TrackboxTrack.prototype.preventInfoWindow = function (){
+	this._preventInfoWindow = true;
+	var self = this;
+	setTimeout(function(){ self._preventInfoWindow = false; }, 200);
 };
 
 TrackboxTrack.prototype._gradient = function(x) {
@@ -269,65 +339,3 @@ TrackboxTrack.prototype._doubleHex = function(x) {
 };
 
 
-TrackboxTrack.prototype._initGoals = function(goals) {
-	this._goals = {};
-
-	for (var key in goals){
-		var goal = goals[key];
-
-		var pos = new google.maps.LatLng(goal.lat, goal.lon);
-		this._goals[key] = new TrackboxGoal(key, pos, goal, this.map);
-	}
-};
-
-
-TrackboxGoal.prototype = new google.maps.OverlayView();
-
-function TrackboxGoal(name, pos, goal, map) {
-	this._name = name;
-	this._pos = pos;
-	this._data = goal;
-	this.map = map;
-	this.setMap(map);
-};
-
-
-TrackboxGoal.prototype.onAdd = function() {
-	this._div = document.createElement('div');
-
-	if (this._name.length > 5) console.log("TODO");
-
-	this._div.style.position = 'absolute';
-	this._div.style.width = '40px';
-	this._div.style.height = '32px';
-
-	this._div.innerHTML = 
-		'<div style="width: 40px; font-size:12px; text-align:center; line-height:1; background-color: #f06292; color: #212121; padding: 1px; border: 1px solid #777; box-shadow: 0 1px 4px -1px rgba(0,0,0,.3)">' + this._name + '</div>' +
-	'<svg width="40" height="14">' +
-		'<line x1="20" y1="0" x2="20" y2="8" stroke="#111" stroke-width="1" />' +
-		'<circle cx="20" cy="10" r="3" stroke="#e91e63" stroke-width="2" fill="none" />' +
-		'</svg>';
-
-	var name = this._name;
-	var sub = (this._data.number) ? this._data.number : 
-				(this._data.coord) ? this._data.coord : '';
-
-	this._div.onclick = function (e) {
-		e.preventDefault();
-		window.trackboxReact.showTrackGoal({ name: name, sub: sub });
-		return false;
-	};
-
-	var panes = this.getPanes();
-	panes.overlayMouseTarget.appendChild(this._div);
-};
-
-TrackboxGoal.prototype.draw = function() {
-	var pos = this._getPosFromLatLng(this._pos);
-	this._div.style.left = (pos.x - 20) + 'px';
-	this._div.style.top = (pos.y - 28) + 'px';
-};
-
-TrackboxGoal.prototype._getPosFromLatLng = function(latlng) {
-	return this.getProjection().fromLatLngToDivPixel(latlng);
-};
