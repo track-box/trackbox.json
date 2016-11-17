@@ -19,6 +19,8 @@ function TrackboxGoal(name, pos, goal, map) {
 TrackboxGoal.prototype.onAdd = function() {
 	this._div = document.createElement('div');
 
+	if (this._name == "") this._name = "?";
+
 	var show_name = this._name;
 	var width = 8 * this._name.length;
 
@@ -82,5 +84,10 @@ TrackboxGoal.prototype._getPosFromLatLng = function(latlng) {
 
 TrackboxGoal.prototype.setColor = function(color) {
 	this.data.color = color;
+	this._redraw();
+};
+
+TrackboxGoal.prototype.setName = function(name) {
+	this._name = name;
 	this._redraw();
 };

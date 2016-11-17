@@ -8,6 +8,9 @@ import {List, ListItem} from 'material-ui/List';
 import { CirclePicker } from 'react-color';
 
 export default class TrackGoalEdit extends React.Component {
+	state = {
+		name: null
+	}
 
 	colors = [
 		"#F06292", // pink300
@@ -18,10 +21,16 @@ export default class TrackGoalEdit extends React.Component {
 		"#7986CB", // indigo300
 	]
 
+	setName (name) {
+		this.setState({ name: name })
+	}
+
 	
 	render() {
 		let { show, editing, goal, onClose, onEdit } = this.props
-	
+		if (!editing) this.state.name = goal.name
+
+		let self = this	
 		if (!show) return (<div></div>)
 
 		return (
@@ -33,7 +42,7 @@ export default class TrackGoalEdit extends React.Component {
 				autoScrollBodyContent={true}
 				title={
 					<div style={{ padding: 24, position: "relative" }}>
-						{goal.name}
+						{this.state.name}
 						<span style={{ marginLeft:"24px", fontSize:"12px" }}>
 							{goal.sub}
 						</span>
@@ -69,8 +78,12 @@ export default class TrackGoalEdit extends React.Component {
 									>
 										<TextField
 											id="name"
-											value={goal.name}
-											onChange={this.handleChange}
+											value={this.state.name}
+											onChange={(e) => {
+												let name = e.target.value
+												self.setName(name)
+												goal.goal.setName(name)
+											}}
 										/>
 									</ListItem>
 									<ListItem

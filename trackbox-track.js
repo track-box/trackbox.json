@@ -258,7 +258,7 @@ TrackboxTrack.prototype.showInfoWindowFromLatLng = function (lat, lng){
 	for (var i = 0; i < this.track.length; i++){
 		var d = Math.pow(this.track[i].lat - lat, 2) + Math.pow(this.track[i].lng - lng, 2);
 		dis.push({ i: i, d: d });
-	};
+	}	
 
 	dis.sort(function (a, b) { return a.d - b.d });
 	this.showInfoWindow(dis[0].i);
