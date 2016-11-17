@@ -4,7 +4,7 @@
  */
 
 /** @constructor */
-function TrackboxTrack(url, div_id) {
+function TrackboxTrack(url, div_id, options) {
 	this._url = url;
 	this._host = "http://track.box"
 	
@@ -22,13 +22,16 @@ function TrackboxTrack(url, div_id) {
 		self.setTitle(data.name);
 		
 		self.goals = new TrackboxGoals(self.map, data.goals);
-		self.longtouch = new TrackboxLongTouch(self.map, self.goals, div_id, function (goal){
-			window.trackboxReact.showTrackGoalAdd(goal);
-		});
 
-		if (data.map){
-			window.trackboxReact.setMapName(data.map.name);
-			self.goals.setMapDef(data.map);
+		if (options && options.edit){
+			self.longtouch = new TrackboxLongTouch(self.map, self.goals, div_id, function (goal){
+				window.trackboxReact.showTrackGoalAdd(goal);
+			});
+
+			if (data.map){
+				window.trackboxReact.setMapName(data.map.name);
+				self.goals.setMapDef(data.map);
+			}
 		}
 		
 		window.trackboxReact.hideLoading();
