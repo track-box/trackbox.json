@@ -91,6 +91,11 @@ TrackboxGoal.prototype.setName = function(name) {
 	this._redraw();
 };
 
+TrackboxGoal.prototype.setCenter = function() {
+	this.map.setZoom(14);
+	this.map.panTo(this._pos);
+};
+
 TrackboxGoal.prototype.delete = function() {
 	this.setMap(null);
 	this.data = null;

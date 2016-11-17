@@ -48,7 +48,10 @@ export default class TrackGoalEdit extends React.Component {
 						</span>
 						<RaisedButton
 							primary={true}
-							onTouchTap={onEdit}
+							onTouchTap={() => {
+								onEdit()
+								goal.goal.setCenter()
+							}}
 							icon={<FontIcon className="material-icons">edit</FontIcon>}
 							style={{
 								position: "absolute",
