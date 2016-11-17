@@ -16,6 +16,7 @@ import TrackboxFAB from './components/TrackboxFAB';
 import Console from './components/Console';
 import Edit from './components/Edit';
 import TrackGoalEditContainer from './containers/TrackGoalEdit';
+import TrackGoalAddContainer from './containers/TrackGoalAdd';
 import LoadingContainer from './containers/Loading';
 import SnackbarContainer from './containers/Snackbar';
 
@@ -38,6 +39,7 @@ const EditApp = () => (
 			<Console mini={false}/>
 			<Edit />
 			<TrackGoalEditContainer />
+			<TrackGoalAddContainer />
 			<LoadingContainer />
 			<SnackbarContainer />
 		</div>

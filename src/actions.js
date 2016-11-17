@@ -95,3 +95,12 @@ export const hideTrackGoalEdit = () => ({
 export const editTrackGoalEdit = () => ({
 	type: 'EDIT_TRACK_GOAL_EDIT'
 })
+
+export const showTrackGoalAdd = (goal) => ({
+	type: 'SHOW_TRACK_GOAL_ADD',
+	goal: goal
+})
+
+export const hideTrackGoalAdd = () => ({
+	type: 'HIDE_TRACK_GOAL_ADD'
+})

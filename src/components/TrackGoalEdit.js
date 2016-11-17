@@ -60,7 +60,7 @@ export default class TrackGoalEdit extends React.Component {
 				}
 				titleStyle={{
 					padding: 0,
-					fontWewght:"normal",
+					fontWeight:"normal",
 					fontSize:"inherit",
 					lineHeight:"inherit"
 				}}
