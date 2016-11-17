@@ -112,12 +112,11 @@ TrackboxGoals.prototype._getDigit = function(lat, lon) {
 
 TrackboxGoals.prototype._addGoal = function(name, lat, lon, goal_data) {
 	var pos = new google.maps.LatLng(lat, lon);
-	var marker = new TrackboxGoal(name, pos, goal_data, this.map);
+	var goal = new TrackboxGoal(name, pos, goal_data, this.map);
 
 	this._goals[name] = {
 		pos: pos,
-		marker: marker,
-		data: goal_data
+		goal: goal
 	};
 };
 
@@ -135,7 +134,7 @@ TrackboxGoals.prototype.deleteGoal = function(name) {
 	if (this._goals[name]){
 		var goal = this._goals[name];
 
-		goal.marker.setMap(null);
+		goal.goal.setMap(null);
 
 		delete this._goals[name];
 	}
