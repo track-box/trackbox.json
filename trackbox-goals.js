@@ -96,18 +96,23 @@ TrackboxGoals.prototype._getDigitLatLon = function(digit) {
 };
 
 TrackboxGoals.prototype._getDigit = function(lat, lon) {
-	var utm = "+proj=utm +zone=" + this._utm.zone;
-	var wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+	if (this._utm){
+		var utm = "+proj=utm +zone=" + this._utm.zone;
+		var wgs84 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
 
-	var pos = proj4(wgs84, utm, [lon, lat]);
+		var pos = proj4(wgs84, utm, [lon, lat]);
 
-	var x = Math.floor(pos[0] / 10);
-	var y = Math.floor(pos[1] / 10);
+		var x = Math.floor(pos[0] / 10);
+		var y = Math.floor(pos[1] / 10);
 
-	var dx = x % 10000;
-	var dy = y % 10000;
+		var dx = x % 10000;
+		var dy = y % 10000;
 
-	return "" + dx + dy;
+		return "" + dx + dy;
+
+	}else{
+		return Math.round(lat * 10000) / 10000 + ", " + Math.round(lon * 10000) /10000; 
+	}
 };
 
 TrackboxGoals.prototype._addGoal = function(name, lat, lon, goal_data) {
@@ -121,6 +126,16 @@ TrackboxGoals.prototype._addGoal = function(name, lat, lon, goal_data) {
 };
 
 
+TrackboxGoals.prototype.addPoint = function(d) {
+	var pos = new google.maps.LatLng(d.lat, d.lng);
+	var num = Object.keys(this._goals).length + "";
+	var goal = new TrackboxGoal(num, pos, { coord: d.name, lat: d.lat, lon: d.lng }, this.map);
+
+	this._goals[num] = {
+		pos: pos,
+		goal: goal
+	};
+};
 
 TrackboxGoals.prototype._showGoal = function(name) {
 	if (this._goals[name]){

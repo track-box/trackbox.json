@@ -12,14 +12,21 @@ export default class TrackGoalEdit extends React.Component {
 			<BottomSheets
 				modal={false}
 				open={show}
-				onRequestClose={() => onClose()}
+				onRequestClose={() => {
+					goal.onClose()
+					onClose()
+				}}
 				title={
 					<div style={{ padding: 24, position: "relative" }}>
 						{goal.name}
 						<RaisedButton
 							label="add"
 							primary={true}
-							onTouchTap={() => window.track.addPoint(goal) }
+							onTouchTap={() => {
+								window.track.addPoint(goal)
+								goal.onClose()
+								onClose()
+							}}
 							style={{
 								position: "absolute",
 								right: "10px",

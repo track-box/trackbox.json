@@ -22,6 +22,9 @@ function TrackboxTrack(url, div_id) {
 		self.setTitle(data.name);
 		
 		self.goals = new TrackboxGoals(self.map, data.goals);
+		self.longtouch = new TrackboxLongTouch(self.map, self.goals, div_id, function (goal){
+			window.trackboxReact.showTrackGoalAdd(goal);
+		});
 
 		if (data.map){
 			window.trackboxReact.setMapName(data.map.name);
@@ -65,6 +68,10 @@ TrackboxTrack.prototype.hideMarker = function (){
 
 TrackboxTrack.prototype.addGoal = function(x) {
 	this.goals.addGoal(x);
+};
+
+TrackboxTrack.prototype.addPoint = function(x) {
+	this.goals.addPoint(x);
 };
 
 TrackboxTrack.prototype.setMap = function(map_name) {
