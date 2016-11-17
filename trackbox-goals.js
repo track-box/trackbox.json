@@ -60,7 +60,7 @@ TrackboxGoals.prototype.addGoal = function(x) {
 	if (x.length == 3){
 		if (this._waypoints[x]){
 			var w = this._waypoints[x];
-			this._addGoal(x, w.lat, w.lon, { number: x });
+			this._addGoal(x, w.lat, w.lon, { coord: x });
 			this._showGoal(x);
 
 		}else{
