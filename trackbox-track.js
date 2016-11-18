@@ -16,10 +16,10 @@ function TrackboxTrack(url, div_id, options) {
 
 		if (options && options.edit){
 			this._edit_id = id;
-			url = this._api + "/edit?" + id;
+			url = this._api + "/edit?" + id + "&callback=?";
 
 		}else{
-			url = this._api + "/get?" + id;
+			url = this._api + "/get?" + id + "&callback=?";
 		}
 	}
 
@@ -54,19 +54,13 @@ function TrackboxTrack(url, div_id, options) {
 
 
 TrackboxTrack.prototype._loadJSON = function(url, callback) {
-	var xhr = new XMLHttpRequest();
-	xhr.open('get', url, true);
-	xhr.onload = function(){
-		data = JSON.parse(this.responseText);
-		callback(data);
-	};
-	xhr.send(null);
+	$.getJSON(url, callback);
 };
 
 TrackboxTrack.prototype.save = function(callback) {
 	var data = this.toJSON();
 	var json = {
-		id: this._edit_id;
+		id: this._edit_id,
 		data: data
 	};
 	console.log(json);
@@ -82,6 +76,18 @@ TrackboxTrack.prototype.toJSON = function() {
 
 
 TrackboxTrack.prototype._postJSON = function(url, data, callback) {
+	$.ajax({
+		type: "POST",
+		url: url,
+		dataType: "json",
+		data: data,
+		success: function(data) {
+			callback();
+		},
+		error: function() {
+			alert("error!");
+		}
+	});
 };
 
 
