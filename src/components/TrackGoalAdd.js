@@ -13,8 +13,7 @@ export default class TrackGoalEdit extends React.Component {
 				modal={false}
 				open={show}
 				onRequestClose={() => {
-					goal.onClose()
-					onClose()
+					if (goal.onClose()) onClose()
 				}}
 				title={
 					<div style={{ padding: 24, position: "relative" }}>
