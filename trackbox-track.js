@@ -93,12 +93,12 @@ TrackboxTrack.prototype.addPoint = function(x) {
 
 TrackboxTrack.prototype.setMap = function(map_name) {
 	window.trackboxReact.showLoading();
+	this.trackboxMap.removeOverlay();
 
 	if (map_name == "none"){
 		var json = {};
 		this.data.map = json;
 		this.trackboxMap.setMapDef(json);
-		this.trackboxMap.removeOverlay();
 		this.goals.setMapDef(json);
 		window.trackboxReact.hideLoading();
 
