@@ -6,9 +6,22 @@
 /** @constructor */
 function TrackboxTrack(url, div_id, options) {
 	this._url = url;
-	this._host = "http://track.box"
+	this._host = "http://track-box.github.io";
+	this._api = "http://trackbox2.herokuapp.com";
 	
 	window.trackboxReact.showLoading();
+
+	if (url == ""){
+		var id = window.location.hash;
+
+		if (options && options.edit){
+			this._edit_id = id;
+			url = this._api + "/edit?" + id;
+
+		}else{
+			url = this._api + "/get?" + id;
+		}
+	}
 
 	var self = this;
 	this._loadJSON(url, function (data){
@@ -51,16 +64,24 @@ TrackboxTrack.prototype._loadJSON = function(url, callback) {
 };
 
 TrackboxTrack.prototype.save = function(callback) {
-	var json = this.toJSON();
+	var data = this.toJSON();
+	var json = {
+		id: this._edit_id;
+		data: data
+	};
 	console.log(json);
 
-	setTimeout(function(){callback()}, 5000);
+	this._postJSON(this._api + '/update', json, callback);
 };
 
 TrackboxTrack.prototype.toJSON = function() {
 	var data = this.data;
 	data.goals = this.goals.toJSON();
 	return data;
+};
+
+
+TrackboxTrack.prototype._postJSON = function(url, data, callback) {
 };
 
 
@@ -242,8 +263,8 @@ TrackboxTrack.prototype._setTrackData = function (){
 		maxSpeed: Math.round(this.summary.max_speed * 10) / 10, // 0.0 m/s
 		minAltitude: Math.round(this.summary.min_alt), // 0 m
 		maxAltitude: Math.round(this.summary.max_alt), // 0 m
-		publicLink: this._host + '/track/' + this.data.track_id,
-		editLink: this._host + '/edit/' + this._edit_id
+		publicLink: this._host + '/track/#' + this.data.track_id,
+		editLink: this._host + '/edit/#' + this._edit_id
 	};
 
 	window.trackboxReact.setTrackData(trackData);
