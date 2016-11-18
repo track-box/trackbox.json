@@ -41,6 +41,9 @@ const EditList = (props) => (
 					<FontIcon className="material-icons">save</FontIcon>
 				}
 				onTouchTap={() => {
+					window.track.save(function(){
+						props.doneSave()
+					})
 					props.showSave()
 					props.onSelected()
 				}}

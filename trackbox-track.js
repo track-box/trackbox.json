@@ -50,6 +50,19 @@ TrackboxTrack.prototype._loadJSON = function(url, callback) {
 	xhr.send(null);
 };
 
+TrackboxTrack.prototype.save = function(callback) {
+	var json = this.toJSON();
+	console.log(json);
+
+	setTimeout(function(){callback()}, 5000);
+};
+
+TrackboxTrack.prototype.toJSON = function() {
+	var data = this.data;
+	data.goals = this.goals.toJSON();
+	return data;
+};
+
 
 /** @public for UI */
 TrackboxTrack.prototype.setTitle = function(name) {

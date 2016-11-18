@@ -8,8 +8,6 @@ export default class Save extends React.Component {
 	render() {
 		let { show, saving, title, onClose } = this.props
 
-		if (saving) setTimeout(function(){ this.props.done(); }.bind(this), 10000)
-
 		const aStyle = {
 			textDecoration: "none",
 			color: "#4078c0",

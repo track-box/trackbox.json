@@ -52,6 +52,23 @@ TrackboxGoals.prototype._loadJSON = function(url, callback) {
 	xhr.send(null);
 };
 
+TrackboxGoals.prototype.toJSON = function() {
+	var goals = {};
+
+	for (var key in this._goals){
+		var goal = this._goals[key].goal;
+		if (goal.data){
+			goals[goal._name] = {
+				lat: goal._pos.lat(),
+				lon: goal._pos.lng(),
+				coord: goal.data.coord,
+				color: goal.data.color
+			};	
+		}
+	}
+	return goals;
+};
+
 TrackboxGoals.prototype.addGoal = function(x) {
 	if (!x){
 		return;
@@ -133,7 +150,7 @@ TrackboxGoals.prototype._addGoal = function(name, lat, lon, goal_data) {
 TrackboxGoals.prototype.addPoint = function(d) {
 	var pos = new google.maps.LatLng(d.lat, d.lng);
 	var num = Object.keys(this._goals).length + "";
-	var goal = new TrackboxGoal(num, pos, { coord: d.name, lat: d.lat, lon: d.lng }, this.map);
+	var goal = new TrackboxGoal(num, pos, { coord: d.name  }, this.map);
 
 	this._goals[num] = {
 		pos: pos,

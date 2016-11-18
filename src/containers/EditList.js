@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import EditList from '../components/EditList'
-import { showAddGoal, showSelectMap, showRename, showLink, showSave } from '../actions'
+import { showAddGoal, showSelectMap, showRename, showLink, showSave, doneSave } from '../actions'
 
 const mapStateToProps = (state) => {
 	return {
@@ -15,6 +15,7 @@ const mapDispatchToProps = (dispatch) => {
 		showRename: () => dispatch(showRename()),
 		showLink: () => dispatch(showLink()),
 		showSave: () => dispatch(showSave()),
+		doneSave: () => dispatch(doneSave()),
 	}
 }
 
