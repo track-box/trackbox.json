@@ -13,6 +13,13 @@ function TrackboxGoal(name, pos, goal, map) {
 	this.data = goal;
 	this.map = map;
 	this.setMap(map);
+
+	if (goal.circle){
+		this._circles = [];
+		for (var i = 0; i < goal.circle.length; i++){
+			this.drawCircle(goal.circle[i]);
+		}
+	}
 };
 
 
@@ -79,6 +86,21 @@ TrackboxGoal.prototype.onRemove = function() {
 
 TrackboxGoal.prototype._getPosFromLatLng = function(latlng) {
 	return this.getProjection().fromLatLngToDivPixel(latlng);
+};
+
+TrackboxGoal.prototype.drawCircle = function(radius) {
+	var circle = new google.maps.Circle({
+		center: this._pos,
+		map: this.map,
+		radius: radius,
+		strokeColor: "#ef5350",
+		strokeOpacity: 0.8,
+		strokeWeight: 2,
+		fillColor: "#ffffff",
+		fillOpacity: 0
+	});
+
+	this._circles.push(circle);
 };
 
 TrackboxGoal.prototype.setColor = function(color) {
