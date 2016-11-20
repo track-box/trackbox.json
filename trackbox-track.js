@@ -12,19 +12,20 @@ function TrackboxTrack(url, div_id, options) {
 	window.trackboxReact.showLoading();
 
 	if (url == ""){
-		var id = window.location.hash;
+		var id = window.location.hash.substr(1);
 
 		if (options && options.edit){
 			this._edit_id = id;
-			url = this._api + "/edit?" + id + "&callback=?";
+			url = this._api + "/edit?id=" + id + "&callback=?";
 
 		}else{
-			url = this._api + "/get?" + id + "&callback=?";
+			url = this._api + "/get?id=" + id + "&callback=?";
 		}
 	}
-
+	console.log(url);
 	var self = this;
 	this._loadJSON(url, function (data){
+		console.log(data);
 		self.data = data;
 
 		var trackboxMap = new TrackboxMap(data.map, div_id);
@@ -61,7 +62,7 @@ TrackboxTrack.prototype.save = function(callback) {
 	var data = this.toJSON();
 	var json = {
 		id: this._edit_id,
-		data: data
+		data: JSON.stringify(data)
 	};
 	console.log(json);
 
