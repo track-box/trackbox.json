@@ -297,7 +297,8 @@ TrackboxTrack.prototype._drawPath = function (){
 	var alt_range = max_alt_up - min_alt;
 	
 	for (var i = 0; i < this.track.length - 1; i++){
-		var color = this._gradient((alt_range == 0) ? 0 : (this.track[i].alt - min_alt) / alt_range);
+		//var color = this._gradient((alt_range == 0) ? 0 : (this.track[i].alt - min_alt) / alt_range);
+		var color = this._fixedGradient(this.track[i].alt - min_alt);
 
 		var polyline = new google.maps.Polyline({
 			path: [ this.track[i].pos, this.track[i+1].pos ],
@@ -365,6 +366,39 @@ TrackboxTrack.prototype._gradient = function(x) {
 		{ value:0.50, r:0,   g:255, b:0   },
 		{ value:0.75, r:255, g:255, b:0   },
 		{ value:1.00, r:255, g:0,   b:0   }
+	];
+
+	var pivot;
+	for (pivot = 1; pivot < grad.length; pivot++){
+		if ( x <= grad[pivot].value ){
+			break;
+		}
+	}
+
+	var l = grad[pivot-1];
+	var r = grad[pivot];
+
+	var delta = (x - grad[pivot-1].value) / (grad[pivot].value - grad[pivot-1].value);
+
+	var color = {
+		r: Math.round( (r.r - l.r) * delta + l.r ),
+		g: Math.round( (r.g - l.g) * delta + l.g ),
+		b: Math.round( (r.b - l.b) * delta + l.b )
+	};
+
+	return "#" + this._doubleHex(color.r) +
+		this._doubleHex(color.g) + this._doubleHex(color.b);
+};
+
+TrackboxTrack.prototype._fixedGradient = function(x) {
+	var grad = [
+		{ value:0, r:0,   g:0,   b:255 },
+		{ value:100, r:0,   g:255, b:255 },
+		{ value:300, r:0,   g:255, b:0   },
+		{ value:600, r:255, g:255, b:0   },
+		{ value:900, r:255, g:0,   b:0   },
+		{ value:1500, r:255, g:0,   b:255 },
+		{ value:2500, r:128, g:0,   b:128 }
 	];
 
 	var pivot;
